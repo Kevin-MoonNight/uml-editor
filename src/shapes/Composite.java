@@ -1,12 +1,13 @@
 package shapes;
 
-public class Composite {
-    private BaseShape[] shapes;
-    private Boundary boundary;
+import utils.BoundaryUtil;
 
-    public Composite(BaseShape[] shapes, Boundary boundary) {
+public class Composite extends BaseShape {
+    private BaseShape[] shapes;
+
+    public Composite(BaseShape[] shapes) {
+        super(BoundaryUtil.getBoundaryOfShapes(shapes));
         this.shapes = shapes;
-        this.boundary = boundary;
     }
 
     public BaseShape[] getShapes() {

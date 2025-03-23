@@ -15,4 +15,12 @@ public class BaseShape {
     public void setLabel(ShapeLabel label) {
         this.label = label;
     }
+
+    public Boundary getBoundary() {
+        return boundary;
+    }
+
+    public void setBoundary(Boundary boundary) {
+        this.boundary = boundary;
+    }
 }
