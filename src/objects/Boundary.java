@@ -1,4 +1,4 @@
-package shapes;
+package objects;
 
 public class Boundary {
     private int x;

@@ -1,16 +1,16 @@
-package shapes;
+package objects;
 
 import java.awt.Color;
 
-public class ShapeLabel {
+public class ObjectLabel {
     String name;
-    String shape;
+    String object;
     Color color;
     int fontSize;
 
-    public ShapeLabel(String name, String shape, Color color, int fontSize) {
+    public ObjectLabel(String name, String object, Color color, int fontSize) {
         this.name = name;
-        this.shape = shape;
+        this.object = object;
         this.color = color;
         this.fontSize = fontSize;
     }

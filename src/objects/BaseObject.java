@@ -1,18 +1,18 @@
-package shapes;
+package objects;
 
-public class BaseShape {
-    protected ShapeLabel label;
+public class BaseObject {
+    protected ObjectLabel label;
     protected Boundary boundary;
 
-    public BaseShape(Boundary boundary) {
+    public BaseObject(Boundary boundary) {
         this.boundary = boundary;
     }
 
-    public ShapeLabel getLabel() {
+    public ObjectLabel getLabel() {
         return label;
     }
 
-    public void setLabel(ShapeLabel label) {
+    public void setLabel(ObjectLabel label) {
         this.label = label;
     }
 

@@ -1,28 +1,28 @@
 package utils;
 
-import shapes.BaseShape;
-import shapes.Boundary;
+import objects.BaseObject;
+import objects.Boundary;
 
 public class BoundaryUtil {
     /**
-     * Calculates the bounding box that encompasses all the given shapes.
+     * Calculates the bounding box that encompasses all the given objects.
      * 
-     * @param shapes An array of BaseShape objects to calculate the boundary for
+     * @param objects An array of BaseObject objects to calculate the boundary for
      * @return A Boundary object representing the smallest rectangle that contains
-     *         all the input shapes
+     *         all the input objects
      */
-    public static Boundary getBoundaryOfShapes(BaseShape[] shapes) {
+    public static Boundary getBoundaryOfObjects(BaseObject[] objects) {
         int minX = Integer.MAX_VALUE;
         int minY = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE;
         int maxY = Integer.MIN_VALUE;
 
-        for (BaseShape shape : shapes) {
-            Boundary shapeBoundary = shape.getBoundary();
-            minX = Math.min(minX, shapeBoundary.getX());
-            minY = Math.min(minY, shapeBoundary.getY());
-            maxX = Math.max(maxX, shapeBoundary.getX() + shapeBoundary.getWidth());
-            maxY = Math.max(maxY, shapeBoundary.getY() + shapeBoundary.getHeight());
+        for (BaseObject object : objects) {
+            Boundary objectBoundary = object.getBoundary();
+            minX = Math.min(minX, objectBoundary.getX());
+            minY = Math.min(minY, objectBoundary.getY());
+            maxX = Math.max(maxX, objectBoundary.getX() + objectBoundary.getWidth());
+            maxY = Math.max(maxY, objectBoundary.getY() + objectBoundary.getHeight());
         }
 
         return new Boundary(
