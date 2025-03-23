@@ -1,6 +1,6 @@
 package objects;
 
-public class BaseObject {
+public class BaseObject implements Boundable {
     protected ObjectLabel label;
     protected Boundary boundary;
 
