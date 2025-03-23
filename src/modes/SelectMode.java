@@ -1,7 +1,7 @@
 package modes;
 
 public class SelectMode implements Mode {
-    public void proccess() {
+    public void handle() {
         System.out.println("SelectMode");
     }
 }
