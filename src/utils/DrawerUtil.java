@@ -20,15 +20,29 @@ public class DrawerUtil {
         System.out
                 .println("Drawing a rectangle at (" + x + ", " + y + ") with width " + width + " and height " + height);
 
-        if (isSelected) {
-            g.setColor(Color.RED);
-        } else {
-            g.setColor(Color.BLACK);
-        }
-
+        g.setColor(Color.BLACK);
         g.drawRect(x, y, width, height);
         g.setColor(Color.GRAY);
         g.fillRect(x, y, width, height);
+
+        // Draw control points if selected
+        if (isSelected) {
+            int controlSize = 10;
+            int halfControl = controlSize / 2;
+            g.setColor(Color.BLACK);
+
+            // Draw corner control points
+            g.fillRect(x - halfControl, y - halfControl, controlSize, controlSize); // Top-left
+            g.fillRect(x + width - halfControl, y - halfControl, controlSize, controlSize); // Top-right
+            g.fillRect(x - halfControl, y + height - halfControl, controlSize, controlSize); // Bottom-left
+            g.fillRect(x + width - halfControl, y + height - halfControl, controlSize, controlSize); // Bottom-right
+
+            // Draw middle control points
+            g.fillRect(x + (width / 2) - halfControl, y - halfControl, controlSize, controlSize); // Top
+            g.fillRect(x + width - halfControl, y + (height / 2) - halfControl, controlSize, controlSize); // Right
+            g.fillRect(x + (width / 2) - halfControl, y + height - halfControl, controlSize, controlSize); // Bottom
+            g.fillRect(x - halfControl, y + (height / 2) - halfControl, controlSize, controlSize); // Left
+        }
     }
 
     public static void drawOval(Graphics g, Boundary boundary) {
@@ -42,15 +56,23 @@ public class DrawerUtil {
         int height = boundary.getHeight();
         System.out.println("Drawing an oval at (" + x + ", " + y + ") with width " + width + " and height " + height);
 
-        if (isSelected) {
-            g.setColor(Color.RED);
-        } else {
-            g.setColor(Color.BLACK);
-        }
-
+        g.setColor(Color.BLACK);
         g.drawOval(x, y, width, height);
         g.setColor(Color.GRAY);
         g.fillOval(x, y, width, height);
+
+        // Draw control points if selected
+        if (isSelected) {
+            int controlSize = 10;
+            int halfControl = controlSize / 2;
+            g.setColor(Color.BLACK);
+
+            // Draw middle control points
+            g.fillRect(x + (width / 2) - halfControl, y - halfControl, controlSize, controlSize); // Top
+            g.fillRect(x + width - halfControl, y + (height / 2) - halfControl, controlSize, controlSize); // Right
+            g.fillRect(x + (width / 2) - halfControl, y + height - halfControl, controlSize, controlSize); // Bottom
+            g.fillRect(x - halfControl, y + (height / 2) - halfControl, controlSize, controlSize); // Left
+        }
     }
 
     public static void drawSelectBox(Graphics g, Boundary boundary) {
