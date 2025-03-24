@@ -14,6 +14,7 @@ public class UMLManager {
 
     private List<BaseObject> objects = new ArrayList<>();
     private List<BaseLink> links = new ArrayList<>();
+    private List<BaseObject> selectedObjects = new ArrayList<>();
 
     private UMLManager() {
     }
@@ -35,18 +36,31 @@ public class UMLManager {
 
     public void addObject(BaseObject object) {
         objects.add(object);
+        CanvasManager.getInstance().update();
     }
 
     public void removeObject(BaseObject object) {
         objects.remove(object);
+        CanvasManager.getInstance().update();
     }
 
     public void addLink(BaseLink link) {
         links.add(link);
+        CanvasManager.getInstance().update();
     }
 
     public void removeLink(BaseLink link) {
         links.remove(link);
+        CanvasManager.getInstance().update();
+    }
+
+    public List<BaseObject> getSelectedObjects() {
+        return selectedObjects;
+    }
+
+    public void setSelectedObjects(List<BaseObject> selectedObjects) {
+        this.selectedObjects = selectedObjects;
+        CanvasManager.getInstance().update();
     }
 
     public Mode getMode() {
