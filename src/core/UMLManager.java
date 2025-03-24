@@ -44,6 +44,13 @@ public class UMLManager {
         CanvasManager.getInstance().update();
     }
 
+    public void removeObject(List<BaseObject> objects) {
+        for (BaseObject object : objects) {
+            this.objects.remove(object);
+        }
+        CanvasManager.getInstance().update();
+    }
+
     public void addLink(BaseLink link) {
         links.add(link);
         CanvasManager.getInstance().update();
