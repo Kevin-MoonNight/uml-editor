@@ -88,13 +88,10 @@ public class BoundaryUtil {
     }
 
     public static BaseObject getObjectsAtPoint(List<BaseObject> objects, Point point) {
-        for (BaseObject object : objects) {
-            if (isObjectAtPoint(object, point)) {
-                return object;
-            }
-        }
-
-        return null;
+        return objects.stream()
+                .filter(object -> isObjectAtPoint(object, point))
+                .reduce((first, second) -> second)
+                .orElse(null);
     }
 
     private static boolean isObjectAtPoint(BaseObject object, Point point) {

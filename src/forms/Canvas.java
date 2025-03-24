@@ -9,6 +9,7 @@ import modes.SelectMode;
 import objects.Boundary;
 import objects.OvalObject;
 import objects.RectObject;
+import utils.BoundaryUtil;
 import utils.DrawerUtil;
 
 import java.awt.*;
@@ -16,6 +17,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Canvas extends JPanel {
+    private Point lastMousePosition;
+    private boolean isDragging = false;
+
     public Canvas() {
         setup();
     }
@@ -26,15 +30,10 @@ public class Canvas extends JPanel {
 
         CanvasManager.getInstance().setCanvas(this);
 
-        // 添加滑鼠監聽器
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("Clicked at: (" + e.getX() + ", " + e.getY() + ")");
-
-                if (e.getButton() != MouseEvent.BUTTON1) {
-                    return;
-                }
+            public void mousePressed(MouseEvent e) {
+                lastMousePosition = e.getPoint();
 
                 if (UMLManager.getInstance().getMode() instanceof CreateMode) {
                     var createMode = (CreateMode) UMLManager.getInstance().getMode();
@@ -46,15 +45,18 @@ public class Canvas extends JPanel {
                 if (UMLManager.getInstance().getMode() instanceof SelectMode) {
                     var selectMode = (SelectMode) UMLManager.getInstance().getMode();
                     selectMode.setOrigin(e.getPoint());
-                    return;
                 }
-            }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (UMLManager.getInstance().getMode() instanceof SelectMode) {
-                    var selectMode = (SelectMode) UMLManager.getInstance().getMode();
-                    selectMode.setOrigin(e.getPoint());
+                var obj = BoundaryUtil.getObjectsAtPoint(UMLManager.getInstance().getObjects(), e.getPoint());
+                var selectedObjects = UMLManager.getInstance().getSelectedObjects();
+
+                if (obj == null) {
+                    selectedObjects.clear();
+                    update();
+                } else if (!selectedObjects.contains(obj)) {
+                    UMLManager.getInstance().removeObject(obj);
+                    UMLManager.getInstance().addObject(obj);
+                    UMLManager.getInstance().setSelectedObjects(new java.util.ArrayList<>(java.util.List.of(obj)));
                 }
             }
 
@@ -62,7 +64,13 @@ public class Canvas extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (UMLManager.getInstance().getMode() instanceof SelectMode) {
                     var selectMode = (SelectMode) UMLManager.getInstance().getMode();
-                    selectMode.setDestination(e.getPoint());
+
+                    if (isDragging) {
+                        isDragging = false;
+                    } else {
+                        selectMode.setDestination(e.getPoint());
+                    }
+
                     selectMode.handle();
                 }
             }
@@ -71,11 +79,34 @@ public class Canvas extends JPanel {
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (UMLManager.getInstance().getMode() instanceof SelectMode) {
-                    var selectMode = (SelectMode) UMLManager.getInstance().getMode();
+                if (!(UMLManager.getInstance().getMode() instanceof SelectMode)) {
+                    return;
+                }
+
+                isDragging = true;
+                var selectedObjects = UMLManager.getInstance().getSelectedObjects();
+                var selectMode = (SelectMode) UMLManager.getInstance().getMode();
+                if (selectedObjects.size() == 0) {
                     selectMode.setDestination(e.getPoint());
                     update();
+                    return;
                 }
+
+                selectMode.setOrigin(null);
+                selectMode.setDestination(null);
+
+                // 計算偏移量
+                int dx = e.getX() - lastMousePosition.x;
+                int dy = e.getY() - lastMousePosition.y;
+
+                for (var object : selectedObjects) {
+                    var boundary = object.getBoundary();
+                    boundary.setX(boundary.getX() + dx);
+                    boundary.setY(boundary.getY() + dy);
+                }
+
+                lastMousePosition = e.getPoint();
+                update();
             }
         });
     }

@@ -37,10 +37,9 @@ public class SelectMode implements Mode {
 
         if (origin.getX() == destination.getX() && origin.getY() == destination.getY()) {
             singleSelect(origin);
-            return;
+        } else {
+            multiSelect();
         }
-
-        multiSelect();
 
         this.origin = null;
         this.destination = null;
@@ -54,6 +53,8 @@ public class SelectMode implements Mode {
                 : new ArrayList<BaseObject>();
 
         UMLManager.getInstance().setSelectedObjects(selectedObjects);
+        UMLManager.getInstance().removeObject(selectObject);
+        UMLManager.getInstance().addObject(selectObject);
     }
 
     private void multiSelect() {
