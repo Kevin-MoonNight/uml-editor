@@ -1,20 +1,22 @@
 package objects;
 
+import java.util.List;
+
 import utils.BoundaryUtil;
 
 public class Composite extends BaseObject {
-    private BaseObject[] objects;
+    private List<BaseObject> objects;
 
-    public Composite(BaseObject[] objects) {
+    public Composite(List<BaseObject> objects) {
         super(BoundaryUtil.getBoundaryOfObjects(objects));
         this.objects = objects;
     }
 
-    public BaseObject[] getObjects() {
+    public List<BaseObject> getObjects() {
         return objects;
     }
 
-    public void setObjects(BaseObject[] objects) {
+    public void setObjects(List<BaseObject> objects) {
         this.objects = objects;
     }
 
