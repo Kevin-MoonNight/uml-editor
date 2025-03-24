@@ -66,7 +66,8 @@ public class UMLManager {
     }
 
     public void setSelectedObjects(List<BaseObject> selectedObjects) {
-        this.selectedObjects = selectedObjects;
+        this.selectedObjects.clear();
+        this.selectedObjects.addAll(selectedObjects);
         CanvasManager.getInstance().update();
     }
 

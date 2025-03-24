@@ -49,10 +49,13 @@ public class SelectMode implements Mode {
         var objects = UMLManager.getInstance().getObjects();
 
         BaseObject selectObject = BoundaryUtil.getObjectsAtPoint(objects, point);
-        ArrayList<BaseObject> selectedObjects = selectObject != null ? new ArrayList<BaseObject>(List.of(selectObject))
-                : new ArrayList<BaseObject>();
 
-        UMLManager.getInstance().setSelectedObjects(selectedObjects);
+        if (selectObject == null) {
+            UMLManager.getInstance().getSelectedObjects().clear();
+            return;
+        }
+
+        UMLManager.getInstance().getSelectedObjects().add(selectObject);
         UMLManager.getInstance().removeObject(selectObject);
         UMLManager.getInstance().addObject(selectObject);
     }
