@@ -1,8 +1,6 @@
 package modes;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
 
 import core.UMLManager;
 import objects.BaseObject;
@@ -51,10 +49,10 @@ public class SelectMode implements Mode {
         BaseObject selectObject = BoundaryUtil.getObjectsAtPoint(objects, point);
 
         if (selectObject == null) {
-            UMLManager.getInstance().getSelectedObjects().clear();
             return;
         }
 
+        UMLManager.getInstance().getSelectedObjects().clear();
         UMLManager.getInstance().getSelectedObjects().add(selectObject);
         UMLManager.getInstance().removeObject(selectObject);
         UMLManager.getInstance().addObject(selectObject);
