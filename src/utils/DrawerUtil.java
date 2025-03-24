@@ -5,6 +5,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import objects.Boundary;
+import objects.BaseObject;
+import objects.CompositeObject;
+import objects.RectObject;
+import objects.OvalObject;
 
 public class DrawerUtil {
 
@@ -96,5 +100,45 @@ public class DrawerUtil {
         g2d.setComposite(originalComposite);
         g2d.setColor(Color.BLACK);
         g2d.drawRect(x, y, width, height);
+    }
+
+    public static void drawCompositeObject(Graphics g, CompositeObject compositeObj, boolean isSelected) {
+        // Draw all contained objects
+        for (BaseObject obj : compositeObj.getObjects()) {
+            if (obj instanceof RectObject) {
+                drawRect(g, obj.getBoundary(), false);
+            } else if (obj instanceof OvalObject) {
+                drawOval(g, obj.getBoundary(), false);
+            } else if (obj instanceof CompositeObject) {
+                drawCompositeObject(g, (CompositeObject) obj, false);
+            }
+        }
+
+        Boundary boundary = compositeObj.getBoundary();
+        // Draw selection border if selected
+        if (isSelected) {
+            g.setColor(Color.BLACK);
+            g.drawRect(boundary.getX(), boundary.getY(),
+                    boundary.getWidth(), boundary.getHeight());
+
+            // Draw control points
+            int controlSize = 10;
+            int halfControl = controlSize / 2;
+            g.setColor(Color.BLACK);
+
+            // Draw corner control points
+            g.fillRect(boundary.getX() - halfControl,
+                    boundary.getY() - halfControl,
+                    controlSize, controlSize); // Top-left
+            g.fillRect(boundary.getX() + boundary.getWidth() - halfControl,
+                    boundary.getY() - halfControl,
+                    controlSize, controlSize); // Top-right
+            g.fillRect(boundary.getX() - halfControl,
+                    boundary.getY() + boundary.getHeight() - halfControl,
+                    controlSize, controlSize); // Bottom-left
+            g.fillRect(boundary.getX() + boundary.getWidth() - halfControl,
+                    boundary.getY() + boundary.getHeight() - halfControl,
+                    controlSize, controlSize); // Bottom-right
+        }
     }
 }

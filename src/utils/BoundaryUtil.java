@@ -6,6 +6,7 @@ import java.util.List;
 
 import objects.BaseObject;
 import objects.Boundary;
+import objects.CompositeObject;
 
 public class BoundaryUtil {
     /**
@@ -100,5 +101,18 @@ public class BoundaryUtil {
                 && point.y >= objectBoundary.getY()
                 && point.x <= objectBoundary.getX() + objectBoundary.getWidth()
                 && point.y <= objectBoundary.getY() + objectBoundary.getHeight();
+    }
+
+    public static void moveObjects(List<BaseObject> objects, int dx, int dy) {
+        for (BaseObject object : objects) {
+            Boundary boundary = object.getBoundary();
+            boundary.setX(boundary.getX() + dx);
+            boundary.setY(boundary.getY() + dy);
+
+            if (object instanceof CompositeObject) {
+                CompositeObject compositeObject = (CompositeObject) object;
+                moveObjects(compositeObject.getObjects(), dx, dy);
+            }
+        }
     }
 }

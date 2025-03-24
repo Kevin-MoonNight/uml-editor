@@ -1,15 +1,16 @@
 package objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import utils.BoundaryUtil;
 
-public class Composite extends BaseObject {
-    private List<BaseObject> objects;
+public class CompositeObject extends BaseObject {
+    private List<BaseObject> objects = new ArrayList<>();
 
-    public Composite(List<BaseObject> objects) {
+    public CompositeObject(List<BaseObject> objects) {
         super(BoundaryUtil.getBoundaryOfObjects(objects));
-        this.objects = objects;
+        this.objects.addAll(objects);
     }
 
     public List<BaseObject> getObjects() {
@@ -17,7 +18,8 @@ public class Composite extends BaseObject {
     }
 
     public void setObjects(List<BaseObject> objects) {
-        this.objects = objects;
+        this.objects.clear();
+        this.objects.addAll(objects);
     }
 
     public Boundary getBoundary() {

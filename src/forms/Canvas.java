@@ -7,6 +7,7 @@ import core.UMLManager;
 import modes.CreateMode;
 import modes.SelectMode;
 import objects.Boundary;
+import objects.CompositeObject;
 import objects.OvalObject;
 import objects.RectObject;
 import utils.BoundaryUtil;
@@ -99,11 +100,7 @@ public class Canvas extends JPanel {
                 int dx = e.getX() - lastMousePosition.x;
                 int dy = e.getY() - lastMousePosition.y;
 
-                for (var object : selectedObjects) {
-                    var boundary = object.getBoundary();
-                    boundary.setX(boundary.getX() + dx);
-                    boundary.setY(boundary.getY() + dy);
-                }
+                BoundaryUtil.moveObjects(selectedObjects, dx, dy);
 
                 lastMousePosition = e.getPoint();
                 update();
@@ -127,6 +124,8 @@ public class Canvas extends JPanel {
                 DrawerUtil.drawRect(g, object.getBoundary(), isSelected);
             } else if (object instanceof OvalObject) {
                 DrawerUtil.drawOval(g, object.getBoundary(), isSelected);
+            } else if (object instanceof CompositeObject) {
+                DrawerUtil.drawCompositeObject(g, (CompositeObject) object, isSelected);
             }
         }
 

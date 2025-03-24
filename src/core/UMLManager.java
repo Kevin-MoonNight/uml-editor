@@ -44,6 +44,11 @@ public class UMLManager {
         CanvasManager.getInstance().update();
     }
 
+    public void removeObjects(List<BaseObject> objects) {
+        this.objects.removeAll(objects);
+        CanvasManager.getInstance().update();
+    }
+
     public void removeObject(List<BaseObject> objects) {
         for (BaseObject object : objects) {
             this.objects.remove(object);

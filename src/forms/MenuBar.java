@@ -9,6 +9,8 @@ public class MenuBar extends JMenuBar {
 
         JMenu editMenu = new JMenu("Edit");
         editMenu.add(new LabelAction(owner));
+        editMenu.add(new GroupAction(owner));
+        editMenu.add(new UnGroupAction(owner));
 
         this.add(fileMenu);
         this.add(editMenu);

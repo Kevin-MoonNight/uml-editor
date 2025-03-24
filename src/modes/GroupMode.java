@@ -4,7 +4,7 @@ import java.util.List;
 
 import core.UMLManager;
 import objects.BaseObject;
-import objects.Composite;
+import objects.CompositeObject;
 
 public class GroupMode implements Mode {
     private List<BaseObject> objects;
@@ -14,7 +14,7 @@ public class GroupMode implements Mode {
     }
 
     public void handle() {
-        Composite composite = new Composite(objects);
+        CompositeObject composite = new CompositeObject(objects);
 
         UMLManager.getInstance().removeObject(objects);
         UMLManager.getInstance().addObject(composite);
