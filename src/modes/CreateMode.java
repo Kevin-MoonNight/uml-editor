@@ -20,6 +20,7 @@ public class CreateMode implements Mode {
     }
 
     public void handle() throws IllegalArgumentException {
+        System.out.println("CreateMode: handle");
         BaseObject newObject = null;
 
         switch (objectType) {
