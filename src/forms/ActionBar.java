@@ -21,6 +21,8 @@ public class ActionBar extends JToolBar {
             "Oval"
     };
 
+    private static final String DEFAULT_ACTION = "Select";
+
     private static final Dimension size = new Dimension(100, Integer.MAX_VALUE);
 
     public ActionBar() {
@@ -38,6 +40,11 @@ public class ActionBar extends JToolBar {
         for (String action : actions) {
             ActionButton btn = new ActionButton(action);
             btn.addActionListener(e -> handleAction(action));
+
+            if (action.equals(DEFAULT_ACTION)) {
+                btn.requestFocus();
+            }
+
             add(btn);
         }
     }
