@@ -40,6 +40,8 @@ public class Canvas extends JPanel {
                     var createMode = (CreateMode) UMLManager.getInstance().getMode();
                     createMode.setBoundary(new Boundary(e.getX(), e.getY(), 100, 100));
                     createMode.handle();
+
+                    update();
                     return;
                 }
 
@@ -53,16 +55,18 @@ public class Canvas extends JPanel {
 
                 if (obj == null) {
                     selectedObjects.clear();
-                    update();
                 } else if (!selectedObjects.contains(obj)) {
                     UMLManager.getInstance().removeObject(obj);
                     UMLManager.getInstance().addObject(obj);
                     UMLManager.getInstance().setSelectedObjects(new java.util.ArrayList<>(java.util.List.of(obj)));
                 }
+
+                update();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                lastMousePosition = e.getPoint();
                 if (UMLManager.getInstance().getMode() instanceof SelectMode) {
                     var selectMode = (SelectMode) UMLManager.getInstance().getMode();
 
@@ -74,6 +78,8 @@ public class Canvas extends JPanel {
 
                     selectMode.handle();
                 }
+
+                update();
             }
         });
 
