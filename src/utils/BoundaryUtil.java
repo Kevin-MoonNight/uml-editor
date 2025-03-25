@@ -103,15 +103,15 @@ public class BoundaryUtil {
                 && point.y <= objectBoundary.getY() + objectBoundary.getHeight();
     }
 
-    public static void moveObjects(List<BaseObject> objects, int dx, int dy) {
+    public static void moveObjects(List<BaseObject> objects, Point offset) {
         for (BaseObject object : objects) {
             Boundary boundary = object.getBoundary();
-            boundary.setX(boundary.getX() + dx);
-            boundary.setY(boundary.getY() + dy);
+            boundary.setX(boundary.getX() + offset.x);
+            boundary.setY(boundary.getY() + offset.y);
 
             if (object instanceof CompositeObject) {
                 CompositeObject compositeObject = (CompositeObject) object;
-                moveObjects(compositeObject.getObjects(), dx, dy);
+                moveObjects(compositeObject.getObjects(), offset);
             }
         }
     }

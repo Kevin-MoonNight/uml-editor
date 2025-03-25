@@ -9,8 +9,10 @@ import forms.Canvas;
 public class CanvasManager {
     private static CanvasManager instance;
     private Canvas canvas;
+    private MouseAdapter defaultListener;
 
     private CanvasManager() {
+        defaultListener = getDefaultListener();
     }
 
     public static CanvasManager getInstance() {
@@ -22,6 +24,10 @@ public class CanvasManager {
 
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
+
+        // Add default listener
+        canvas.addMouseListener(defaultListener);
+        canvas.addMouseMotionListener(defaultListener);
     }
 
     public Canvas getCanvas() {
@@ -32,16 +38,17 @@ public class CanvasManager {
         canvas.repaint();
     }
 
-    public void addMouseListener(MouseAdapter adapter) {
+    public void registerTrigger(MouseAdapter trigger) {
         clearMouseListeners();
 
-        canvas.addMouseListener(adapter);
+        canvas.addMouseListener(trigger);
+        canvas.addMouseMotionListener(trigger);
     }
 
     public void clearMouseListeners() {
         for (MouseListener listener : canvas.getMouseListeners()) {
             // Remove all listeners except the default listener
-            if (listener != getDefaultListener()) {
+            if (listener != defaultListener) {
                 canvas.removeMouseListener(listener);
             }
         }
@@ -61,11 +68,6 @@ public class CanvasManager {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                update();
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
                 update();
             }
         };

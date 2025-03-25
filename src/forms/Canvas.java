@@ -18,9 +18,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Canvas extends JPanel {
-    private Point lastMousePosition;
-    private boolean isDragging = false;
-
     public Canvas() {
         setup();
     }
@@ -34,8 +31,6 @@ public class Canvas extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                lastMousePosition = e.getPoint();
-
                 if (UMLManager.getInstance().getMode() instanceof LinkMode) {
                     var linkMode = (LinkMode) UMLManager.getInstance().getMode();
                     var sourceObject = BoundaryUtil.getObjectAtPoint(UMLManager.getInstance().getObjects(),
@@ -49,32 +44,11 @@ public class Canvas extends JPanel {
                     linkMode.setSource(sourceObject);
                     linkMode.setSourcePoint(e.getPoint());
                     update();
-                    return;
                 }
-
-                if (UMLManager.getInstance().getMode() instanceof SelectMode) {
-                    var selectMode = (SelectMode) UMLManager.getInstance().getMode();
-                    selectMode.setOrigin(e.getPoint());
-                }
-
-                var obj = BoundaryUtil.getObjectAtPoint(UMLManager.getInstance().getObjects(), e.getPoint());
-                var selectedObjects = UMLManager.getInstance().getSelectedObjects();
-
-                if (obj == null) {
-                    selectedObjects.clear();
-                } else if (!selectedObjects.contains(obj)) {
-                    UMLManager.getInstance().removeObject(obj);
-                    UMLManager.getInstance().addObject(obj);
-                    UMLManager.getInstance().setSelectedObjects(new java.util.ArrayList<>(java.util.List.of(obj)));
-                }
-
-                update();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                lastMousePosition = e.getPoint();
-
                 if (UMLManager.getInstance().getMode() instanceof LinkMode) {
                     var linkMode = (LinkMode) UMLManager.getInstance().getMode();
                     var targetObject = BoundaryUtil.getObjectAtPoint(UMLManager.getInstance().getObjects(),
@@ -84,19 +58,6 @@ public class Canvas extends JPanel {
                     linkMode.setTargetPoint(e.getPoint());
                     linkMode.handle();
                 }
-
-                if (UMLManager.getInstance().getMode() instanceof SelectMode) {
-                    var selectMode = (SelectMode) UMLManager.getInstance().getMode();
-
-                    if (isDragging) {
-                        isDragging = false;
-                    } else {
-                        selectMode.setDestination(e.getPoint());
-                    }
-
-                    selectMode.handle();
-                }
-
                 update();
             }
         });
@@ -111,36 +72,6 @@ public class Canvas extends JPanel {
                     linkMode.setTargetPoint(e.getPoint());
                     update();
                 }
-
-                if (!(UMLManager.getInstance().getMode() instanceof SelectMode)) {
-                    return;
-                }
-
-                isDragging = true;
-                var selectedObjects = UMLManager.getInstance().getSelectedObjects();
-                var selectMode = (SelectMode) UMLManager.getInstance().getMode();
-                if (selectedObjects.size() == 0) {
-                    selectMode.setDestination(e.getPoint());
-                    update();
-                    return;
-                }
-
-                selectMode.setOrigin(null);
-                selectMode.setDestination(null);
-
-                // 計算偏移量
-                int dx = e.getX() - lastMousePosition.x;
-                int dy = e.getY() - lastMousePosition.y;
-
-                BoundaryUtil.moveObjects(selectedObjects, dx, dy);
-
-                var links = UMLManager.getInstance().getLinks();
-                links.forEach(link -> {
-                    link.updateConnectionPoints();
-                });
-
-                lastMousePosition = e.getPoint();
-                update();
             }
         });
     }
@@ -171,8 +102,8 @@ public class Canvas extends JPanel {
         // Draw the select box
         if (UMLManager.getInstance().getMode() instanceof SelectMode) {
             var selectMode = (SelectMode) UMLManager.getInstance().getMode();
-            var origin = selectMode.getOrigin();
-            var destination = selectMode.getDestination();
+            var origin = selectMode.getSource();
+            var destination = selectMode.getTarget();
 
             if (origin != null && destination != null) {
                 var boundary = new Boundary(

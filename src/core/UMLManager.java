@@ -76,6 +76,30 @@ public class UMLManager {
         CanvasManager.getInstance().update();
     }
 
+    public void upperObject(BaseObject object) {
+        objects.remove(object);
+        objects.add(object);
+    }
+
+    public void updateSelectedObjects(BaseObject... objects) {
+        updateSelectedObjects(List.of(objects));
+    }
+
+    public void updateSelectedObjects(List<BaseObject> objects) {
+        objects.forEach(object -> upperObject(object));
+
+        selectedObjects.clear();
+        selectedObjects.addAll(objects);
+    }
+
+    public boolean isSelected(BaseObject object) {
+        return selectedObjects.contains(object);
+    }
+
+    public void clearSelectedObjects() {
+        selectedObjects.clear();
+    }
+
     public Mode getMode() {
         return mode;
     }
