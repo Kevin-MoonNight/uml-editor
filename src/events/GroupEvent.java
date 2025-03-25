@@ -13,6 +13,10 @@ public class GroupEvent {
         // Get selected objects
         var objects = UMLManager.getInstance().getSelectedObjects();
 
+        if (objects.size() <= 1) {
+            return;
+        }
+
         // Create a composite object
         var composite = new CompositeObject(objects);
 

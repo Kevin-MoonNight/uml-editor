@@ -15,6 +15,10 @@ public class UnGroupEvent {
         // Get selected objects
         var objects = UMLManager.getInstance().getSelectedObjects();
 
+        if (objects.size() == 0) {
+            return;
+        }
+
         // Filter out composites
         var composites = objects.stream()
                 .filter(obj -> obj instanceof CompositeObject)
