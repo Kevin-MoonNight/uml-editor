@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import core.CanvasManager;
 import core.UMLManager;
-import modes.CreateMode;
 import modes.LinkMode;
 import modes.SelectMode;
 import objects.Boundary;
@@ -26,7 +25,7 @@ public class Canvas extends JPanel {
         setup();
     }
 
-    private void setup() {
+    public void setup() {
         setLayout(null);
         setBackground(Color.lightGray);
 
@@ -49,15 +48,6 @@ public class Canvas extends JPanel {
                     System.out.println("Pressed LinkMode");
                     linkMode.setSource(sourceObject);
                     linkMode.setSourcePoint(e.getPoint());
-                    update();
-                    return;
-                }
-
-                if (UMLManager.getInstance().getMode() instanceof CreateMode) {
-                    var createMode = (CreateMode) UMLManager.getInstance().getMode();
-                    createMode.setBoundary(new Boundary(e.getX(), e.getY(), 100, 100));
-                    createMode.handle();
-
                     update();
                     return;
                 }

@@ -2,12 +2,13 @@ package forms;
 
 import javax.swing.*;
 
+import core.CanvasManager;
 import core.UMLManager;
 import links.LinkType;
-import modes.CreateMode;
+import modes.CreateOvalMode;
+import modes.CreateRectMode;
 import modes.LinkMode;
 import modes.SelectMode;
-import objects.ObjectType;
 
 import java.awt.*;
 
@@ -52,6 +53,10 @@ public class ActionBar extends JToolBar {
     private void handleAction(String action) {
         System.out.println("Action: " + action);
 
+        CanvasManager.getInstance().clearMouseListeners();
+        ;
+        CanvasManager.getInstance().getCanvas().setup();
+
         switch (action) {
             case "Select":
                 UMLManager.getInstance().setMode(new SelectMode());
@@ -66,10 +71,12 @@ public class ActionBar extends JToolBar {
                 UMLManager.getInstance().setMode(new LinkMode(LinkType.COMPOSITION));
                 break;
             case "Rect":
-                UMLManager.getInstance().setMode(new CreateMode(ObjectType.RECT));
+                UMLManager.getInstance()
+                        .setMode(new CreateRectMode(CanvasManager.getInstance(), UMLManager.getInstance()));
                 break;
             case "Oval":
-                UMLManager.getInstance().setMode(new CreateMode(ObjectType.OVAL));
+                UMLManager.getInstance()
+                        .setMode(new CreateOvalMode(CanvasManager.getInstance(), UMLManager.getInstance()));
                 break;
             default:
                 break;
