@@ -1,9 +1,11 @@
 package objects;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
 import utils.BoundaryUtil;
+import utils.DrawerUtil;
 
 public class CompositeObject extends BaseObject {
     private List<BaseObject> objects = new ArrayList<>();
@@ -28,5 +30,10 @@ public class CompositeObject extends BaseObject {
 
     public void setBoundary(Boundary boundary) {
         this.boundary = boundary;
+    }
+
+    @Override
+    public void draw(Graphics g, boolean isSelected) {
+        DrawerUtil.drawCompositeObject(g, this, isSelected);
     }
 }

@@ -4,6 +4,8 @@ import javax.swing.*;
 
 import core.CanvasManager;
 import core.UMLManager;
+import drawers.LinkingDrawer;
+import drawers.SelectBoxDrawer;
 import modes.AssociationLinkMode;
 import modes.CompositionLinkMode;
 import modes.CreateOvalMode;
@@ -63,15 +65,19 @@ public class ActionBar extends JToolBar {
         switch (action) {
             case "Select":
                 mode = new SelectMode(umlManager);
+                canvasManager.registerCustomDrawer(new SelectBoxDrawer());
                 break;
             case "Association":
                 mode = new AssociationLinkMode(umlManager);
+                canvasManager.registerCustomDrawer(new LinkingDrawer());
                 break;
             case "Generalization":
                 mode = new GeneralizationLinkMode(umlManager);
+                canvasManager.registerCustomDrawer(new LinkingDrawer());
                 break;
             case "Composition":
                 mode = new CompositionLinkMode(umlManager);
+                canvasManager.registerCustomDrawer(new LinkingDrawer());
                 break;
             case "Rect":
                 mode = new CreateRectMode(umlManager);

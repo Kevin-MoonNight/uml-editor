@@ -1,18 +1,34 @@
 package core;
 
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import drawers.Drawer;
+import drawers.LinkDrawer;
+import drawers.SelectedObjectDrawer;
+import drawers.UnSelectedObjectDrawer;
 import forms.Canvas;
+import utils.DrawerUtil;
 
 public class CanvasManager {
     private static CanvasManager instance;
+
+    private static final Drawer[] DEFAULT_DRAWERS = new Drawer[] {
+            new SelectedObjectDrawer(),
+            new UnSelectedObjectDrawer(),
+            new LinkDrawer()
+    };
+    private List<Drawer> drawers = new ArrayList<>(Arrays.asList(DEFAULT_DRAWERS));
+
     private Canvas canvas;
-    private MouseAdapter defaultTrigger;
+
+    private MouseAdapter defaultTrigger = getDefaultTrigger();
 
     private CanvasManager() {
-        defaultTrigger = getDefaultTrigger();
     }
 
     public static CanvasManager getInstance() {
@@ -69,6 +85,23 @@ public class CanvasManager {
                 update();
             }
         };
+    }
+
+    public void registerCustomDrawer(Drawer drawer) {
+        drawers.clear();
+
+        drawers.addAll(Arrays.asList(DEFAULT_DRAWERS));
+        drawers.add(drawer);
+    }
+
+    public void render(Graphics g) {
+        if (canvas == null) {
+            return;
+        }
+
+        DrawerUtil.clear(canvas, g);
+
+        drawers.forEach(drawer -> drawer.draw(g, canvas));
     }
 
     public void setCanvas(Canvas canvas) {

@@ -1,6 +1,8 @@
 package objects;
 
-public class BaseObject implements Boundable {
+import java.awt.Graphics;
+
+public abstract class BaseObject implements Boundable {
     protected ObjectLabel label;
     protected Boundary boundary;
 
@@ -23,4 +25,6 @@ public class BaseObject implements Boundable {
     public void setBoundary(Boundary boundary) {
         this.boundary = boundary;
     }
+
+    public abstract void draw(Graphics g, boolean isSelected);
 }

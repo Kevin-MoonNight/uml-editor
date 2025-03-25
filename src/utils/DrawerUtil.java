@@ -1,9 +1,13 @@
 package utils;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+
+import forms.Canvas;
+
 import java.awt.Font;
 import java.awt.FontMetrics;
 
@@ -156,6 +160,14 @@ public class DrawerUtil {
         drawSingleControlPoint(g, target.x, target.y);
     }
 
+    public static void drawLinkLine(Graphics g, Point source, Point target) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setStroke(new BasicStroke(2.0f));
+        g2d.setColor(Color.BLACK);
+
+        g2d.drawLine(source.x, source.y, target.x, target.y);
+    }
+
     public static void drawLabel(Graphics g, BaseObject object) {
         ObjectLabel label = object.getLabel();
         if (label == null)
@@ -194,5 +206,10 @@ public class DrawerUtil {
         int textY = labelY + (labelHeight - metrics.getHeight()) / 2 + metrics.getAscent();
 
         g.drawString(text, textX, textY);
+    }
+
+    public static void clear(Canvas canvas, Graphics g) {
+        g.setColor(Color.lightGray);
+        g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 }

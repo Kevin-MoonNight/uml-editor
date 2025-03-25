@@ -40,6 +40,8 @@ public class UMLManager {
 
     public void removeObjects(List<BaseObject> objects) {
         this.objects.removeAll(objects);
+
+        selectedObjects.removeAll(objects);
     }
 
     public void addLink(BaseLink link) {
@@ -52,6 +54,12 @@ public class UMLManager {
 
     public List<BaseObject> getSelectedObjects() {
         return selectedObjects;
+    }
+
+    public List<BaseObject> getUnSelectedObjects() {
+        return objects.stream()
+                .filter(obj -> !selectedObjects.contains(obj))
+                .toList();
     }
 
     public void upperObject(BaseObject object) {
