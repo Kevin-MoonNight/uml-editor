@@ -10,12 +10,9 @@ import objects.Boundary;
 import objects.CompositeObject;
 import objects.OvalObject;
 import objects.RectObject;
-import utils.BoundaryUtil;
 import utils.DrawerUtil;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class Canvas extends JPanel {
     public Canvas() {
@@ -27,53 +24,6 @@ public class Canvas extends JPanel {
         setBackground(Color.lightGray);
 
         CanvasManager.getInstance().setCanvas(this);
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (UMLManager.getInstance().getMode() instanceof LinkMode) {
-                    var linkMode = (LinkMode) UMLManager.getInstance().getMode();
-                    var sourceObject = BoundaryUtil.getObjectAtPoint(UMLManager.getInstance().getObjects(),
-                            e.getPoint());
-
-                    if (sourceObject == null || sourceObject instanceof CompositeObject) {
-                        return;
-                    }
-
-                    System.out.println("Pressed LinkMode");
-                    linkMode.setSource(sourceObject);
-                    linkMode.setSourcePoint(e.getPoint());
-                    update();
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (UMLManager.getInstance().getMode() instanceof LinkMode) {
-                    var linkMode = (LinkMode) UMLManager.getInstance().getMode();
-                    var targetObject = BoundaryUtil.getObjectAtPoint(UMLManager.getInstance().getObjects(),
-                            e.getPoint());
-
-                    linkMode.setTarget(targetObject);
-                    linkMode.setTargetPoint(e.getPoint());
-                    linkMode.handle();
-                }
-                update();
-            }
-        });
-
-        addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                if (UMLManager.getInstance().getMode() instanceof LinkMode) {
-                    System.out.println("Dragged LinkMode");
-                    var linkMode = (LinkMode) UMLManager.getInstance().getMode();
-
-                    linkMode.setTargetPoint(e.getPoint());
-                    update();
-                }
-            }
-        });
     }
 
     @Override

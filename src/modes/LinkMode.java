@@ -1,42 +1,91 @@
 package modes;
 
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import core.UMLManager;
-import links.AssociationLink;
+import events.DuringLinkEvent;
+import events.StartLinkEvent;
+import events.StopLinkEvent;
 import links.BaseLink;
-import links.CompositionLink;
-import links.GeneralizationLink;
-import links.LinkType;
 import objects.BaseObject;
 import objects.CompositeObject;
 import utils.LineUtil;
 
-public class LinkMode implements Mode {
-    private LinkType linkType;
+public abstract class LinkMode implements Mode {
+    protected UMLManager umlManager;
+
     private BaseObject source;
     private BaseObject target;
+
     private Point sourcePoint;
     private Point targetPoint;
 
-    public LinkMode(LinkType linkType) {
-        this.linkType = linkType;
+    public LinkMode(UMLManager umlManager) {
+        this.umlManager = umlManager;
     }
 
-    public void setSource(BaseObject origin) {
-        if (source instanceof CompositeObject) {
+    public MouseAdapter getTrigger() {
+        return new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                StartLinkEvent.handle(e, LinkMode.this);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                StopLinkEvent.handle(e, LinkMode.this);
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                DuringLinkEvent.handle(e, LinkMode.this);
+            }
+        };
+    }
+
+    public void handle() {
+        if (isLinkValid(source, target)) {
+            BaseLink link = createLink(source, target, sourcePoint, targetPoint);
+
+            umlManager.addLink(link);
+        }
+
+        reset();
+    }
+
+    private boolean isLinkValid(BaseObject source, BaseObject target) {
+        return isValidObject(source) && isValidObject(target) && !source.equals(target);
+    }
+
+    private boolean isValidObject(BaseObject object) {
+        return object != null && !(object instanceof CompositeObject);
+    }
+
+    protected abstract BaseLink createLink(BaseObject source, BaseObject target, Point sourcePoint, Point targetPoint);
+
+    public void reset() {
+        source = null;
+        target = null;
+        sourcePoint = null;
+        targetPoint = null;
+    }
+
+    public void setSource(BaseObject source) {
+        if (!isValidObject(source)) {
             return;
         }
 
-        this.source = origin;
+        this.source = source;
     }
 
-    public void setTarget(BaseObject destination) {
-        if (target instanceof CompositeObject) {
+    public void setTarget(BaseObject target) {
+        if (!isValidObject(target)) {
             return;
         }
 
-        this.target = destination;
+        this.target = target;
     }
 
     public BaseObject getSource() {
@@ -48,7 +97,6 @@ public class LinkMode implements Mode {
     }
 
     public void setSourcePoint(Point sourcePoint) {
-        System.out.println("setSourcePoint");
         this.sourcePoint = sourcePoint;
 
         if (this.source != null) {
@@ -57,7 +105,6 @@ public class LinkMode implements Mode {
     }
 
     public void setTargetPoint(Point targetPoint) {
-        System.out.println("setTargetPoint");
         this.targetPoint = targetPoint;
 
         if (this.target != null) {
@@ -71,56 +118,5 @@ public class LinkMode implements Mode {
 
     public Point getTargetPoint() {
         return targetPoint;
-    }
-
-    public void handle() {
-        System.out.println("LinkMode");
-
-        if (source instanceof CompositeObject) {
-            reset();
-            return;
-        }
-
-        if (target instanceof CompositeObject) {
-            reset();
-            return;
-        }
-
-        if (source == null || target == null) {
-            reset();
-            return;
-        }
-
-        if (source.equals(target)) {
-            reset();
-            return;
-        }
-
-        BaseLink link = null;
-
-        switch (linkType) {
-            case ASSOCIATION:
-                link = new AssociationLink(source, target, sourcePoint, targetPoint);
-                break;
-            case GENERALIZATION:
-                link = new GeneralizationLink(source, target, sourcePoint, targetPoint);
-                break;
-            case COMPOSITION:
-                link = new CompositionLink(source, target, sourcePoint, targetPoint);
-                break;
-            default:
-                break;
-        }
-
-        UMLManager.getInstance().addLink(link);
-
-        reset();
-    }
-
-    public void reset() {
-        source = null;
-        target = null;
-        sourcePoint = null;
-        targetPoint = null;
     }
 }

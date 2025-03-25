@@ -3,6 +3,7 @@ package core;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import forms.Canvas;
 
@@ -50,6 +51,13 @@ public class CanvasManager {
             // Remove all listeners except the default listener
             if (listener != defaultListener) {
                 canvas.removeMouseListener(listener);
+            }
+        }
+
+        for (MouseMotionListener listener : canvas.getMouseMotionListeners()) {
+            // Remove all listeners except the default listener
+            if (listener != defaultListener) {
+                canvas.removeMouseMotionListener(listener);
             }
         }
     }

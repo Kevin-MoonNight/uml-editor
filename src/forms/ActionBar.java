@@ -4,10 +4,12 @@ import javax.swing.*;
 
 import core.CanvasManager;
 import core.UMLManager;
-import links.LinkType;
+import modes.AssociationLinkMode;
+import modes.CompositionLinkMode;
 import modes.CreateOvalMode;
 import modes.CreateRectMode;
-import modes.LinkMode;
+import modes.GeneralizationLinkMode;
+import modes.Mode;
 import modes.SelectMode;
 
 import java.awt.*;
@@ -25,6 +27,9 @@ public class ActionBar extends JToolBar {
     private static final String DEFAULT_ACTION = "Select";
 
     private static final Dimension size = new Dimension(100, Integer.MAX_VALUE);
+
+    private UMLManager umlManager = UMLManager.getInstance();
+    private CanvasManager canvasManager = CanvasManager.getInstance();
 
     public ActionBar() {
         setup();
@@ -53,33 +58,32 @@ public class ActionBar extends JToolBar {
     private void handleAction(String action) {
         System.out.println("Action: " + action);
 
-        CanvasManager.getInstance().clearMouseListeners();
-        ;
-        CanvasManager.getInstance().getCanvas().setup();
+        Mode mode = null;
 
         switch (action) {
             case "Select":
-                UMLManager.getInstance().setMode(new SelectMode());
+                mode = new SelectMode(umlManager);
                 break;
             case "Association":
-                UMLManager.getInstance().setMode(new LinkMode(LinkType.ASSOCIATION));
+                mode = new AssociationLinkMode(umlManager);
                 break;
             case "Generalization":
-                UMLManager.getInstance().setMode(new LinkMode(LinkType.GENERALIZATION));
+                mode = new GeneralizationLinkMode(umlManager);
                 break;
             case "Composition":
-                UMLManager.getInstance().setMode(new LinkMode(LinkType.COMPOSITION));
+                mode = new CompositionLinkMode(umlManager);
                 break;
             case "Rect":
-                UMLManager.getInstance()
-                        .setMode(new CreateRectMode(CanvasManager.getInstance(), UMLManager.getInstance()));
+                mode = new CreateRectMode(umlManager);
                 break;
             case "Oval":
-                UMLManager.getInstance()
-                        .setMode(new CreateOvalMode(CanvasManager.getInstance(), UMLManager.getInstance()));
+                mode = new CreateOvalMode(umlManager);
                 break;
             default:
                 break;
         }
+
+        umlManager.setMode(mode);
+        canvasManager.registerTrigger(mode.getTrigger());
     }
 }
