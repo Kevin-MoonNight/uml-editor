@@ -9,6 +9,7 @@ import links.CompositionLink;
 import links.GeneralizationLink;
 import links.LinkType;
 import objects.BaseObject;
+import objects.CompositeObject;
 import utils.LineUtil;
 
 public class LinkMode implements Mode {
@@ -23,10 +24,18 @@ public class LinkMode implements Mode {
     }
 
     public void setSource(BaseObject origin) {
+        if (source instanceof CompositeObject) {
+            return;
+        }
+
         this.source = origin;
     }
 
     public void setTarget(BaseObject destination) {
+        if (target instanceof CompositeObject) {
+            return;
+        }
+
         this.target = destination;
     }
 
@@ -66,6 +75,16 @@ public class LinkMode implements Mode {
 
     public void handle() {
         System.out.println("LinkMode");
+
+        if (source instanceof CompositeObject) {
+            reset();
+            return;
+        }
+
+        if (target instanceof CompositeObject) {
+            reset();
+            return;
+        }
 
         if (source == null || target == null) {
             reset();

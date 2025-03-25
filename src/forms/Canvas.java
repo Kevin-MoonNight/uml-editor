@@ -42,7 +42,7 @@ public class Canvas extends JPanel {
                     var sourceObject = BoundaryUtil.getObjectAtPoint(UMLManager.getInstance().getObjects(),
                             e.getPoint());
 
-                    if (sourceObject == null) {
+                    if (sourceObject == null || sourceObject instanceof CompositeObject) {
                         return;
                     }
 
@@ -146,9 +146,7 @@ public class Canvas extends JPanel {
 
                 var links = UMLManager.getInstance().getLinks();
                 links.forEach(link -> {
-                    if (selectedObjects.contains(link.getSource()) || selectedObjects.contains(link.getTarget())) {
-                        link.updateConnectionPoints();
-                    }
+                    link.updateConnectionPoints();
                 });
 
                 lastMousePosition = e.getPoint();

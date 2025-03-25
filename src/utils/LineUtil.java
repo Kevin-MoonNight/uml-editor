@@ -4,11 +4,16 @@ import java.awt.Point;
 
 import objects.BaseObject;
 import objects.Boundary;
+import objects.CompositeObject;
 import objects.RectObject;
 
 public class LineUtil {
     public static Point findNearestControlPoint(BaseObject object, Point current) {
         Point[] controlPoints = getControlPoints(object);
+
+        if (controlPoints.length == 0) {
+            return current;
+        }
 
         Point nearest = controlPoints[0];
         double minDistance = distance(nearest, current);
@@ -31,6 +36,10 @@ public class LineUtil {
 
     private static Point[] getControlPoints(BaseObject obj) {
         Boundary b = obj.getBoundary();
+
+        if (obj instanceof CompositeObject) {
+            return new Point[] {};
+        }
 
         Point[] middleControlPoints = getMiddleControlPoints(obj, b);
 
