@@ -14,70 +14,26 @@ import java.awt.FontMetrics;
 import links.BaseLink;
 import objects.Boundary;
 import objects.BaseObject;
-import objects.CompositeObject;
 import objects.ObjectLabel;
-import objects.RectObject;
-import objects.OvalObject;
 
 public class DrawerUtil {
-
     public static void drawRect(Graphics g, Boundary boundary) {
-        drawRect(g, boundary, false);
-    }
-
-    public static void drawRect(Graphics g, Boundary boundary, boolean isSelected) {
-        System.out.println("Drawing a rectangle at (" + boundary.getX() + ", " + boundary.getY() +
-                ") with width " + boundary.getWidth() + " and height " + boundary.getHeight());
-
         g.setColor(Color.BLACK);
         g.drawRect(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
         g.setColor(Color.GRAY);
         g.fillRect(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
-
-        if (isSelected) {
-            drawControlPoints(g, boundary, true);
-        }
     }
 
     public static void drawOval(Graphics g, Boundary boundary) {
-        drawOval(g, boundary, false);
-    }
-
-    public static void drawOval(Graphics g, Boundary boundary, boolean isSelected) {
-        System.out.println("Drawing an oval at (" + boundary.getX() + ", " + boundary.getY() +
-                ") with width " + boundary.getWidth() + " and height " + boundary.getHeight());
-
         g.setColor(Color.BLACK);
         g.drawOval(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
         g.setColor(Color.GRAY);
         g.fillOval(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
-
-        if (isSelected) {
-            drawControlPoints(g, boundary, false);
-        }
     }
 
-    private static void drawControlPoints(Graphics g, Boundary boundary, boolean includeCorners) {
-        int x = boundary.getX();
-        int y = boundary.getY();
-        int width = boundary.getWidth();
-        int height = boundary.getHeight();
-
+    public static void drawCompositeBox(Graphics g, Boundary boundary) {
         g.setColor(Color.BLACK);
-
-        // Draw corner control points if needed
-        if (includeCorners) {
-            drawSingleControlPoint(g, x, y); // Top-left
-            drawSingleControlPoint(g, x + width, y); // Top-right
-            drawSingleControlPoint(g, x, y + height); // Bottom-left
-            drawSingleControlPoint(g, x + width, y + height); // Bottom-right
-        }
-
-        // Draw middle control points
-        drawSingleControlPoint(g, x + (width / 2), y); // Top
-        drawSingleControlPoint(g, x + width, y + (height / 2)); // Right
-        drawSingleControlPoint(g, x + (width / 2), y + height); // Bottom
-        drawSingleControlPoint(g, x, y + (height / 2)); // Left
+        g.drawRect(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
     }
 
     public static void drawSingleControlPoint(Graphics g, int x, int y) {
@@ -92,8 +48,6 @@ public class DrawerUtil {
         int y = boundary.getY();
         int width = boundary.getWidth();
         int height = boundary.getHeight();
-        System.out.println(
-                "Drawing a select box at (" + x + ", " + y + ") with width " + width + " and height " + height);
 
         Graphics2D g2d = (Graphics2D) g;
         // 保存原始設置
@@ -108,46 +62,6 @@ public class DrawerUtil {
         g2d.setComposite(originalComposite);
         g2d.setColor(Color.BLACK);
         g2d.drawRect(x, y, width, height);
-    }
-
-    public static void drawCompositeObject(Graphics g, CompositeObject compositeObj, boolean isSelected) {
-        // Draw all contained objects
-        for (BaseObject obj : compositeObj.getObjects()) {
-            if (obj instanceof RectObject) {
-                drawRect(g, obj.getBoundary(), false);
-            } else if (obj instanceof OvalObject) {
-                drawOval(g, obj.getBoundary(), false);
-            } else if (obj instanceof CompositeObject) {
-                drawCompositeObject(g, (CompositeObject) obj, false);
-            }
-        }
-
-        Boundary boundary = compositeObj.getBoundary();
-        // Draw selection border if selected
-        if (isSelected) {
-            g.setColor(Color.BLACK);
-            g.drawRect(boundary.getX(), boundary.getY(),
-                    boundary.getWidth(), boundary.getHeight());
-
-            // Draw control points
-            int controlSize = 10;
-            int halfControl = controlSize / 2;
-            g.setColor(Color.BLACK);
-
-            // Draw corner control points
-            g.fillRect(boundary.getX() - halfControl,
-                    boundary.getY() - halfControl,
-                    controlSize, controlSize); // Top-left
-            g.fillRect(boundary.getX() + boundary.getWidth() - halfControl,
-                    boundary.getY() - halfControl,
-                    controlSize, controlSize); // Top-right
-            g.fillRect(boundary.getX() - halfControl,
-                    boundary.getY() + boundary.getHeight() - halfControl,
-                    controlSize, controlSize); // Bottom-left
-            g.fillRect(boundary.getX() + boundary.getWidth() - halfControl,
-                    boundary.getY() + boundary.getHeight() - halfControl,
-                    controlSize, controlSize); // Bottom-right
-        }
     }
 
     public static void drawLink(Graphics g, BaseLink link) {

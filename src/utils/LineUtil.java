@@ -1,6 +1,8 @@
 package utils;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 import objects.BaseObject;
 import objects.Boundary;
@@ -9,13 +11,13 @@ import objects.RectObject;
 
 public class LineUtil {
     public static Point findNearestControlPoint(BaseObject object, Point current) {
-        Point[] controlPoints = getControlPoints(object);
+        var controlPoints = getControlPoints(object);
 
-        if (controlPoints.length == 0) {
+        if (controlPoints.size() == 0) {
             return current;
         }
 
-        Point nearest = controlPoints[0];
+        Point nearest = controlPoints.get(0);
         double minDistance = distance(nearest, current);
 
         for (Point p : controlPoints) {
@@ -34,41 +36,52 @@ public class LineUtil {
                         Math.pow(p2.y - p1.y, 2));
     }
 
-    private static Point[] getControlPoints(BaseObject obj) {
-        Boundary b = obj.getBoundary();
-
+    public static List<Point> getControlPoints(BaseObject obj) {
         if (obj instanceof CompositeObject) {
-            return new Point[] {};
+            return new ArrayList<>();
         }
 
-        Point[] middleControlPoints = getMiddleControlPoints(obj, b);
+        var middleControlPoints = getMiddleControlPoints(obj.getBoundary());
 
         if (obj instanceof RectObject) {
-            Point[] cornerControlPoints = getCornerControlPoints(obj, b);
-            Point[] result = new Point[middleControlPoints.length + cornerControlPoints.length];
-            System.arraycopy(middleControlPoints, 0, result, 0, middleControlPoints.length);
-            System.arraycopy(cornerControlPoints, 0, result, middleControlPoints.length, cornerControlPoints.length);
-            return result;
+            var cornerControlPoints = getCornerControlPoints(obj.getBoundary());
+
+            List<Point> points = new ArrayList<>();
+            points.addAll(middleControlPoints);
+            points.addAll(cornerControlPoints);
+
+            return points;
         }
 
         return middleControlPoints;
     }
 
-    private static Point[] getMiddleControlPoints(BaseObject obj, Boundary b) {
-        return new Point[] {
+    public static List<Point> getAllControlPoints(Boundary b) {
+        var middleControlPoints = getMiddleControlPoints(b);
+        var cornerControlPoints = getCornerControlPoints(b);
+
+        List<Point> points = new ArrayList<>();
+        points.addAll(middleControlPoints);
+        points.addAll(cornerControlPoints);
+
+        return points;
+    }
+
+    public static List<Point> getMiddleControlPoints(Boundary b) {
+        return List.of(
                 new Point(b.getX() + b.getWidth() / 2, b.getY()), // 上
                 new Point(b.getX() + b.getWidth(), b.getY() + b.getHeight() / 2), // 右
                 new Point(b.getX() + b.getWidth() / 2, b.getY() + b.getHeight()), // 下
                 new Point(b.getX(), b.getY() + b.getHeight() / 2) // 左
-        };
+        );
     }
 
-    private static Point[] getCornerControlPoints(BaseObject obj, Boundary b) {
-        return new Point[] {
+    public static List<Point> getCornerControlPoints(Boundary b) {
+        return List.of(
                 new Point(b.getX(), b.getY()), // 左上
                 new Point(b.getX(), b.getY() + b.getHeight()), // 左下
                 new Point(b.getX() + b.getWidth(), b.getY()), // 右上
                 new Point(b.getX() + b.getWidth(), b.getY() + b.getHeight()) // 右下
-        };
+        );
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import utils.BoundaryUtil;
 import utils.DrawerUtil;
+import utils.LineUtil;
 
 public class CompositeObject extends BaseObject {
     private List<BaseObject> objects = new ArrayList<>();
@@ -24,16 +25,16 @@ public class CompositeObject extends BaseObject {
         this.objects.addAll(objects);
     }
 
-    public Boundary getBoundary() {
-        return boundary;
-    }
-
-    public void setBoundary(Boundary boundary) {
-        this.boundary = boundary;
-    }
-
     @Override
     public void draw(Graphics g, boolean isSelected) {
-        DrawerUtil.drawCompositeObject(g, this, isSelected);
+        getObjects().forEach(obj -> obj.draw(g, false));
+
+        if (!isSelected) {
+            return;
+        }
+
+        DrawerUtil.drawCompositeBox(g, getBoundary());
+        LineUtil.getCornerControlPoints(getBoundary())
+                .forEach(p -> DrawerUtil.drawSingleControlPoint(g, p.x, p.y));
     }
 }
