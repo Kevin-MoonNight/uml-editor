@@ -85,7 +85,7 @@ public class SelectMode implements Mode {
             return;
         }
 
-        umlManager.setSelectedObjects(targetObjects);
+        umlManager.updateSelectedObjects(targetObjects);
     }
 
     public void reset() {

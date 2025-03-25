@@ -4,34 +4,35 @@ import java.util.List;
 
 import core.UMLManager;
 import objects.CompositeObject;
+import objects.BaseObject;
 
 public class UnGroupEvent {
-    public UnGroupEvent() {
-    }
+    private static final UMLManager umlManager = UMLManager.getInstance();
 
     public static void handle() {
-        System.out.println("UnGroupEvent handled");
-
-        // Get selected objects
-        var objects = UMLManager.getInstance().getSelectedObjects();
+        var objects = umlManager.getSelectedObjects();
 
         if (objects.size() == 0) {
             return;
         }
 
-        // Filter out composites
-        var composites = objects.stream()
+        var compositeObjects = filterCompositeObjects(objects);
+
+        umlManager.removeObjects(compositeObjects);
+
+        unpackCompositeObjects(compositeObjects).forEach(umlManager::addObject);
+    }
+
+    private static List<BaseObject> filterCompositeObjects(List<BaseObject> objects) {
+        return objects.stream()
                 .filter(obj -> obj instanceof CompositeObject)
-                .map(obj -> (CompositeObject) obj)
                 .toList();
+    }
 
-        // Remove composites from UMLManager
-        UMLManager.getInstance().removeObjects((List) composites);
-
-        // Add objects inside composites to UMLManager
-        composites.stream()
-                .map(CompositeObject::getObjects)
+    private static List<BaseObject> unpackCompositeObjects(List<BaseObject> compositeObjects) {
+        return compositeObjects.stream()
+                .map(obj -> ((CompositeObject) obj).getObjects())
                 .flatMap(List::stream)
-                .forEach(UMLManager.getInstance()::addObject);
+                .toList();
     }
 }

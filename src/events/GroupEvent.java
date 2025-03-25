@@ -4,28 +4,24 @@ import core.UMLManager;
 import objects.CompositeObject;
 
 public class GroupEvent {
-    public GroupEvent() {
-    }
+    private static final UMLManager umlManager = UMLManager.getInstance();
 
     public static void handle() {
-        System.out.println("GroupEvent handled");
+        var selectedObjects = umlManager.getSelectedObjects();
 
-        // Get selected objects
-        var objects = UMLManager.getInstance().getSelectedObjects();
-
-        if (objects.size() <= 1) {
+        if (selectedObjects.size() <= 1) {
             return;
         }
 
         // Create a composite object
-        var composite = new CompositeObject(objects);
+        var composite = new CompositeObject(selectedObjects);
 
         // Remove objects from UMLManager
-        UMLManager.getInstance().removeObject(objects);
-        UMLManager.getInstance().getSelectedObjects().clear();
+        umlManager.removeObjects(selectedObjects);
+        umlManager.clearSelectedObjects();
 
         // Add composite object to UMLManager
-        UMLManager.getInstance().addObject(composite);
-        UMLManager.getInstance().getSelectedObjects().add(composite);
+        umlManager.addObject(composite);
+        umlManager.updateSelectedObjects(composite);
     }
 }

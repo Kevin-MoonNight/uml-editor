@@ -36,44 +36,22 @@ public class UMLManager {
 
     public void addObject(BaseObject object) {
         objects.add(object);
-        CanvasManager.getInstance().update();
-    }
-
-    public void removeObject(BaseObject object) {
-        objects.remove(object);
-        CanvasManager.getInstance().update();
     }
 
     public void removeObjects(List<BaseObject> objects) {
         this.objects.removeAll(objects);
-        CanvasManager.getInstance().update();
-    }
-
-    public void removeObject(List<BaseObject> objects) {
-        for (BaseObject object : objects) {
-            this.objects.remove(object);
-        }
-        CanvasManager.getInstance().update();
     }
 
     public void addLink(BaseLink link) {
         links.add(link);
-        CanvasManager.getInstance().update();
     }
 
     public void removeLink(BaseLink link) {
         links.remove(link);
-        CanvasManager.getInstance().update();
     }
 
     public List<BaseObject> getSelectedObjects() {
         return selectedObjects;
-    }
-
-    public void setSelectedObjects(List<BaseObject> selectedObjects) {
-        this.selectedObjects.clear();
-        this.selectedObjects.addAll(selectedObjects);
-        CanvasManager.getInstance().update();
     }
 
     public void upperObject(BaseObject object) {
