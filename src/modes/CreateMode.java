@@ -3,35 +3,33 @@ package modes;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import core.CanvasManager;
 import core.UMLManager;
+import events.CreateEvent;
 import objects.Boundary;
 
 public abstract class CreateMode implements Mode {
-    protected Boundary boundary;
-    protected CanvasManager canvasManager;
     protected UMLManager umlManager;
 
-    public CreateMode(CanvasManager canvasManager, UMLManager umlManager) {
-        this.canvasManager = canvasManager;
+    private Boundary boundary;
+
+    public CreateMode(UMLManager umlManager) {
         this.umlManager = umlManager;
-        setup();
     }
 
-    private void setup() {
-        var trigger = new MouseAdapter() {
+    public MouseAdapter getTrigger() {
+        return new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                boundary = new Boundary(e.getX(), e.getY(), 100, 100);
-
-                handle();
-
-                canvasManager.update();
+                CreateEvent.handle(e, CreateMode.this);
             }
         };
-
-        canvasManager.addMouseListener(trigger);
     }
 
-    public abstract void handle();
+    public void setBoundary(Boundary boundary) {
+        this.boundary = boundary;
+    }
+
+    public Boundary getBoundary() {
+        return boundary;
+    }
 }
