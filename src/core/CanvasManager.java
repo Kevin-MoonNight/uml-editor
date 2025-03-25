@@ -91,6 +91,11 @@ public class CanvasManager {
         drawers.clear();
 
         drawers.addAll(Arrays.asList(DEFAULT_DRAWERS));
+
+        if (drawer == null) {
+            return;
+        }
+
         drawers.add(drawer);
     }
 
