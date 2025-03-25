@@ -46,7 +46,7 @@ public class SelectMode implements Mode {
     private void singleSelect(Point point) {
         var objects = UMLManager.getInstance().getObjects();
 
-        BaseObject selectObject = BoundaryUtil.getObjectsAtPoint(objects, point);
+        BaseObject selectObject = BoundaryUtil.getObjectAtPoint(objects, point);
 
         if (selectObject == null) {
             return;

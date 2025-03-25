@@ -5,6 +5,7 @@ import javax.swing.*;
 import core.CanvasManager;
 import core.UMLManager;
 import modes.CreateMode;
+import modes.LinkMode;
 import modes.SelectMode;
 import objects.Boundary;
 import objects.CompositeObject;
@@ -36,6 +37,22 @@ public class Canvas extends JPanel {
             public void mousePressed(MouseEvent e) {
                 lastMousePosition = e.getPoint();
 
+                if (UMLManager.getInstance().getMode() instanceof LinkMode) {
+                    var linkMode = (LinkMode) UMLManager.getInstance().getMode();
+                    var sourceObject = BoundaryUtil.getObjectAtPoint(UMLManager.getInstance().getObjects(),
+                            e.getPoint());
+
+                    if (sourceObject == null) {
+                        return;
+                    }
+
+                    System.out.println("Pressed LinkMode");
+                    linkMode.setSource(sourceObject);
+                    linkMode.setSourcePoint(e.getPoint());
+                    update();
+                    return;
+                }
+
                 if (UMLManager.getInstance().getMode() instanceof CreateMode) {
                     var createMode = (CreateMode) UMLManager.getInstance().getMode();
                     createMode.setBoundary(new Boundary(e.getX(), e.getY(), 100, 100));
@@ -50,7 +67,7 @@ public class Canvas extends JPanel {
                     selectMode.setOrigin(e.getPoint());
                 }
 
-                var obj = BoundaryUtil.getObjectsAtPoint(UMLManager.getInstance().getObjects(), e.getPoint());
+                var obj = BoundaryUtil.getObjectAtPoint(UMLManager.getInstance().getObjects(), e.getPoint());
                 var selectedObjects = UMLManager.getInstance().getSelectedObjects();
 
                 if (obj == null) {
@@ -67,6 +84,17 @@ public class Canvas extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 lastMousePosition = e.getPoint();
+
+                if (UMLManager.getInstance().getMode() instanceof LinkMode) {
+                    var linkMode = (LinkMode) UMLManager.getInstance().getMode();
+                    var targetObject = BoundaryUtil.getObjectAtPoint(UMLManager.getInstance().getObjects(),
+                            e.getPoint());
+
+                    linkMode.setTarget(targetObject);
+                    linkMode.setTargetPoint(e.getPoint());
+                    linkMode.handle();
+                }
+
                 if (UMLManager.getInstance().getMode() instanceof SelectMode) {
                     var selectMode = (SelectMode) UMLManager.getInstance().getMode();
 
@@ -86,6 +114,14 @@ public class Canvas extends JPanel {
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
+                if (UMLManager.getInstance().getMode() instanceof LinkMode) {
+                    System.out.println("Dragged LinkMode");
+                    var linkMode = (LinkMode) UMLManager.getInstance().getMode();
+
+                    linkMode.setTargetPoint(e.getPoint());
+                    update();
+                }
+
                 if (!(UMLManager.getInstance().getMode() instanceof SelectMode)) {
                     return;
                 }
@@ -107,6 +143,13 @@ public class Canvas extends JPanel {
                 int dy = e.getY() - lastMousePosition.y;
 
                 BoundaryUtil.moveObjects(selectedObjects, dx, dy);
+
+                var links = UMLManager.getInstance().getLinks();
+                links.forEach(link -> {
+                    if (selectedObjects.contains(link.getSource()) || selectedObjects.contains(link.getTarget())) {
+                        link.updateConnectionPoints();
+                    }
+                });
 
                 lastMousePosition = e.getPoint();
                 update();
@@ -149,6 +192,29 @@ public class Canvas extends JPanel {
                         Math.abs(destination.y - origin.y));
                 DrawerUtil.drawSelectBox(g, boundary);
             }
+        }
+
+        // Draw the links
+        var links = UMLManager.getInstance().getLinks();
+        for (var link : links) {
+            DrawerUtil.drawLink(g, link);
+        }
+
+        // Draw connecting line
+        if (UMLManager.getInstance().getMode() instanceof LinkMode) {
+            LinkMode linkMode = (LinkMode) UMLManager.getInstance().getMode();
+            Point source = linkMode.getSourcePoint();
+            Point target = linkMode.getTargetPoint();
+
+            if (source == null || target == null) {
+                return;
+            }
+
+            System.out.println("Draw connecting line");
+
+            g.setColor(Color.BLACK);
+            DrawerUtil.drawSingleControlPoint(g, source.x, source.y);
+            g.drawLine(source.x, source.y, target.x, target.y);
         }
     }
 

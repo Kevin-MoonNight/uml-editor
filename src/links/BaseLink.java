@@ -1,29 +1,51 @@
 package links;
 
+import java.awt.Point;
+
 import objects.BaseObject;
+import utils.LineUtil;
 
 public class BaseLink {
-    private BaseObject origin;
-    private BaseObject destination;
+    private BaseObject source;
+    private BaseObject target;
+    private Point sourcePoint;
+    private Point targetPoint;
 
-    public BaseLink(BaseObject origin, BaseObject destination) {
-        this.origin = origin;
-        this.destination = destination;
+    public BaseLink(BaseObject source, BaseObject target, Point sourcePoint, Point targetPoint) {
+        this.source = source;
+        this.target = target;
+        this.sourcePoint = sourcePoint;
+        this.targetPoint = targetPoint;
+        updateConnectionPoints();
     }
 
-    public BaseObject getOrigin() {
-        return origin;
+    public void updateConnectionPoints() {
+        // 找到最近的控制點
+        sourcePoint = LineUtil.findNearestControlPoint(source, sourcePoint);
+        targetPoint = LineUtil.findNearestControlPoint(target, targetPoint);
     }
 
-    public BaseObject getDestination() {
-        return destination;
+    public BaseObject getSource() {
+        return source;
     }
 
-    public void setOrigin(BaseObject origin) {
-        this.origin = origin;
+    public BaseObject getTarget() {
+        return target;
     }
 
-    public void setDestination(BaseObject destination) {
-        this.destination = destination;
+    public void setSource(BaseObject origin) {
+        this.source = origin;
+    }
+
+    public void setTarget(BaseObject destination) {
+        this.target = destination;
+    }
+
+    public Point getSourcePoint() {
+        return sourcePoint;
+    }
+
+    public Point getTargetPoint() {
+        return targetPoint;
     }
 }

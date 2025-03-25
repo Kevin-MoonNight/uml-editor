@@ -3,7 +3,9 @@ package utils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
+import links.BaseLink;
 import objects.Boundary;
 import objects.BaseObject;
 import objects.CompositeObject;
@@ -17,35 +19,16 @@ public class DrawerUtil {
     }
 
     public static void drawRect(Graphics g, Boundary boundary, boolean isSelected) {
-        int x = boundary.getX();
-        int y = boundary.getY();
-        int width = boundary.getWidth();
-        int height = boundary.getHeight();
-        System.out
-                .println("Drawing a rectangle at (" + x + ", " + y + ") with width " + width + " and height " + height);
+        System.out.println("Drawing a rectangle at (" + boundary.getX() + ", " + boundary.getY() +
+                ") with width " + boundary.getWidth() + " and height " + boundary.getHeight());
 
         g.setColor(Color.BLACK);
-        g.drawRect(x, y, width, height);
+        g.drawRect(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
         g.setColor(Color.GRAY);
-        g.fillRect(x, y, width, height);
+        g.fillRect(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
 
-        // Draw control points if selected
         if (isSelected) {
-            int controlSize = 10;
-            int halfControl = controlSize / 2;
-            g.setColor(Color.BLACK);
-
-            // Draw corner control points
-            g.fillRect(x - halfControl, y - halfControl, controlSize, controlSize); // Top-left
-            g.fillRect(x + width - halfControl, y - halfControl, controlSize, controlSize); // Top-right
-            g.fillRect(x - halfControl, y + height - halfControl, controlSize, controlSize); // Bottom-left
-            g.fillRect(x + width - halfControl, y + height - halfControl, controlSize, controlSize); // Bottom-right
-
-            // Draw middle control points
-            g.fillRect(x + (width / 2) - halfControl, y - halfControl, controlSize, controlSize); // Top
-            g.fillRect(x + width - halfControl, y + (height / 2) - halfControl, controlSize, controlSize); // Right
-            g.fillRect(x + (width / 2) - halfControl, y + height - halfControl, controlSize, controlSize); // Bottom
-            g.fillRect(x - halfControl, y + (height / 2) - halfControl, controlSize, controlSize); // Left
+            drawControlPoints(g, boundary, true);
         }
     }
 
@@ -54,29 +37,46 @@ public class DrawerUtil {
     }
 
     public static void drawOval(Graphics g, Boundary boundary, boolean isSelected) {
+        System.out.println("Drawing an oval at (" + boundary.getX() + ", " + boundary.getY() +
+                ") with width " + boundary.getWidth() + " and height " + boundary.getHeight());
+
+        g.setColor(Color.BLACK);
+        g.drawOval(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
+        g.setColor(Color.GRAY);
+        g.fillOval(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
+
+        if (isSelected) {
+            drawControlPoints(g, boundary, false);
+        }
+    }
+
+    private static void drawControlPoints(Graphics g, Boundary boundary, boolean includeCorners) {
         int x = boundary.getX();
         int y = boundary.getY();
         int width = boundary.getWidth();
         int height = boundary.getHeight();
-        System.out.println("Drawing an oval at (" + x + ", " + y + ") with width " + width + " and height " + height);
 
         g.setColor(Color.BLACK);
-        g.drawOval(x, y, width, height);
-        g.setColor(Color.GRAY);
-        g.fillOval(x, y, width, height);
 
-        // Draw control points if selected
-        if (isSelected) {
-            int controlSize = 10;
-            int halfControl = controlSize / 2;
-            g.setColor(Color.BLACK);
-
-            // Draw middle control points
-            g.fillRect(x + (width / 2) - halfControl, y - halfControl, controlSize, controlSize); // Top
-            g.fillRect(x + width - halfControl, y + (height / 2) - halfControl, controlSize, controlSize); // Right
-            g.fillRect(x + (width / 2) - halfControl, y + height - halfControl, controlSize, controlSize); // Bottom
-            g.fillRect(x - halfControl, y + (height / 2) - halfControl, controlSize, controlSize); // Left
+        // Draw corner control points if needed
+        if (includeCorners) {
+            drawSingleControlPoint(g, x, y); // Top-left
+            drawSingleControlPoint(g, x + width, y); // Top-right
+            drawSingleControlPoint(g, x, y + height); // Bottom-left
+            drawSingleControlPoint(g, x + width, y + height); // Bottom-right
         }
+
+        // Draw middle control points
+        drawSingleControlPoint(g, x + (width / 2), y); // Top
+        drawSingleControlPoint(g, x + width, y + (height / 2)); // Right
+        drawSingleControlPoint(g, x + (width / 2), y + height); // Bottom
+        drawSingleControlPoint(g, x, y + (height / 2)); // Left
+    }
+
+    public static void drawSingleControlPoint(Graphics g, int x, int y) {
+        int controlSize = 10;
+        int halfControl = controlSize / 2;
+        g.fillRect(x - halfControl, y - halfControl, controlSize, controlSize);
     }
 
     public static void drawSelectBox(Graphics g, Boundary boundary) {
@@ -140,5 +140,21 @@ public class DrawerUtil {
                     boundary.getY() + boundary.getHeight() - halfControl,
                     controlSize, controlSize); // Bottom-right
         }
+    }
+
+    public static void drawLink(Graphics g, BaseLink link) {
+        Point source = link.getSourcePoint();
+        Point target = link.getTargetPoint();
+
+        g.setColor(Color.BLACK);
+        g.drawLine(source.x, source.y, target.x, target.y);
+
+        // 可以選擇在連接點畫一個小圓點
+        int dotSize = 4;
+        g.fillOval(source.x - dotSize / 2, source.y - dotSize / 2, dotSize, dotSize);
+        g.fillOval(target.x - dotSize / 2, target.y - dotSize / 2, dotSize, dotSize);
+
+        DrawerUtil.drawSingleControlPoint(g, source.x, source.y);
+        DrawerUtil.drawSingleControlPoint(g, target.x, target.y);
     }
 }

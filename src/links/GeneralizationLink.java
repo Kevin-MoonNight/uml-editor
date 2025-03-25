@@ -1,9 +1,11 @@
 package links;
 
+import java.awt.Point;
+
 import objects.BaseObject;
 
 public class GeneralizationLink extends BaseLink {
-    public GeneralizationLink(BaseObject origin, BaseObject destination) {
-        super(origin, destination);
+    public GeneralizationLink(BaseObject source, BaseObject target, Point sourcePoint, Point targetPoint) {
+        super(source, target, sourcePoint, targetPoint);
     }
 }

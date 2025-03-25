@@ -88,7 +88,7 @@ public class BoundaryUtil {
                 && objectY2 <= selectionY2;
     }
 
-    public static BaseObject getObjectsAtPoint(List<BaseObject> objects, Point point) {
+    public static BaseObject getObjectAtPoint(List<BaseObject> objects, Point point) {
         return objects.stream()
                 .filter(object -> isObjectAtPoint(object, point))
                 .reduce((first, second) -> second)

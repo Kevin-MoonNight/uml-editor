@@ -1,5 +1,7 @@
 package modes;
 
+import java.awt.Point;
+
 import core.UMLManager;
 import links.AssociationLink;
 import links.BaseLink;
@@ -7,43 +9,99 @@ import links.CompositionLink;
 import links.GeneralizationLink;
 import links.LinkType;
 import objects.BaseObject;
+import utils.LineUtil;
 
 public class LinkMode implements Mode {
     private LinkType linkType;
-    private BaseObject origin;
-    private BaseObject destination;
+    private BaseObject source;
+    private BaseObject target;
+    private Point sourcePoint;
+    private Point targetPoint;
 
     public LinkMode(LinkType linkType) {
         this.linkType = linkType;
     }
 
-    public void setOrigin(BaseObject origin) {
-        this.origin = origin;
+    public void setSource(BaseObject origin) {
+        this.source = origin;
     }
 
-    public void setDestination(BaseObject destination) {
-        this.destination = destination;
+    public void setTarget(BaseObject destination) {
+        this.target = destination;
+    }
+
+    public BaseObject getSource() {
+        return source;
+    }
+
+    public BaseObject getTarget() {
+        return target;
+    }
+
+    public void setSourcePoint(Point sourcePoint) {
+        System.out.println("setSourcePoint");
+        this.sourcePoint = sourcePoint;
+
+        if (this.source != null) {
+            this.sourcePoint = LineUtil.findNearestControlPoint(source, sourcePoint);
+        }
+    }
+
+    public void setTargetPoint(Point targetPoint) {
+        System.out.println("setTargetPoint");
+        this.targetPoint = targetPoint;
+
+        if (this.target != null) {
+            this.targetPoint = LineUtil.findNearestControlPoint(target, targetPoint);
+        }
+    }
+
+    public Point getSourcePoint() {
+        return sourcePoint;
+    }
+
+    public Point getTargetPoint() {
+        return targetPoint;
     }
 
     public void handle() {
         System.out.println("LinkMode");
 
+        if (source == null || target == null) {
+            reset();
+            return;
+        }
+
+        if (source.equals(target)) {
+            reset();
+            return;
+        }
+
         BaseLink link = null;
 
         switch (linkType) {
             case ASSOCIATION:
-                link = new AssociationLink(origin, destination);
+                link = new AssociationLink(source, target, sourcePoint, targetPoint);
                 break;
             case GENERALIZATION:
-                link = new GeneralizationLink(origin, destination);
+                link = new GeneralizationLink(source, target, sourcePoint, targetPoint);
                 break;
             case COMPOSITION:
-                link = new CompositionLink(origin, destination);
+                link = new CompositionLink(source, target, sourcePoint, targetPoint);
                 break;
             default:
                 break;
         }
 
         UMLManager.getInstance().addLink(link);
+
+        reset();
+    }
+
+    public void reset() {
+        source = null;
+        target = null;
+        sourcePoint = null;
+        targetPoint = null;
     }
 }
