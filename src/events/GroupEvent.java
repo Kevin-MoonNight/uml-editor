@@ -13,15 +13,11 @@ public class GroupEvent {
             return;
         }
 
-        // Create a composite object
         var composite = new CompositeObject(selectedObjects);
 
-        // Remove objects from UMLManager
         umlManager.removeObjects(selectedObjects);
-        umlManager.clearSelectedObjects();
-
-        // Add composite object to UMLManager
         umlManager.addObject(composite);
+
         umlManager.updateSelectedObjects(composite);
     }
 }
