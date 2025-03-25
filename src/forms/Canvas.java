@@ -169,8 +169,10 @@ public class Canvas extends JPanel {
 
             if (object instanceof RectObject) {
                 DrawerUtil.drawRect(g, object.getBoundary(), isSelected);
+                DrawerUtil.drawLabel(g, object);
             } else if (object instanceof OvalObject) {
                 DrawerUtil.drawOval(g, object.getBoundary(), isSelected);
+                DrawerUtil.drawLabel(g, object);
             } else if (object instanceof CompositeObject) {
                 DrawerUtil.drawCompositeObject(g, (CompositeObject) object, isSelected);
             }
