@@ -202,21 +202,26 @@ public class Canvas extends JPanel {
 
         // Draw connecting line
         if (UMLManager.getInstance().getMode() instanceof LinkMode) {
+            System.out.println("Draw connecting line");
             LinkMode linkMode = (LinkMode) UMLManager.getInstance().getMode();
             Point source = linkMode.getSourcePoint();
             Point target = linkMode.getTargetPoint();
 
-            if (source == null || target == null) {
+            if (source == null) {
                 return;
             }
 
-            System.out.println("Draw connecting line");
-
             Graphics2D g2d = (Graphics2D) g;
             g2d.setStroke(new BasicStroke(2.0f));
-
-            DrawerUtil.drawSingleControlPoint(g, source.x, source.y);
             g2d.setColor(Color.BLACK);
+            DrawerUtil.drawSingleControlPoint(g, source.x, source.y);
+
+            if (target == null) {
+                var currentMousePosition = getMousePosition();
+                g2d.drawLine(source.x, source.y, currentMousePosition.x, currentMousePosition.y);
+                return;
+            }
+
             g2d.drawLine(source.x, source.y, target.x, target.y);
         }
     }
