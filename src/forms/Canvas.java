@@ -212,9 +212,12 @@ public class Canvas extends JPanel {
 
             System.out.println("Draw connecting line");
 
-            g.setColor(Color.BLACK);
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setStroke(new BasicStroke(2.0f));
+
             DrawerUtil.drawSingleControlPoint(g, source.x, source.y);
-            g.drawLine(source.x, source.y, target.x, target.y);
+            g2d.setColor(Color.BLACK);
+            g2d.drawLine(source.x, source.y, target.x, target.y);
         }
     }
 

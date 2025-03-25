@@ -1,11 +1,12 @@
 package links;
 
 import java.awt.Point;
+import java.awt.Graphics;
 
 import objects.BaseObject;
 import utils.LineUtil;
 
-public class BaseLink {
+public abstract class BaseLink {
     private BaseObject source;
     private BaseObject target;
     private Point sourcePoint;
@@ -48,4 +49,6 @@ public class BaseLink {
     public Point getTargetPoint() {
         return targetPoint;
     }
+
+    public abstract void drawLink(Graphics g);
 }

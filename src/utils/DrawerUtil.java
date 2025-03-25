@@ -77,6 +77,7 @@ public class DrawerUtil {
     }
 
     public static void drawSingleControlPoint(Graphics g, int x, int y) {
+        g.setColor(Color.BLACK);
         int controlSize = 10;
         int halfControl = controlSize / 2;
         g.fillRect(x - halfControl, y - halfControl, controlSize, controlSize);
@@ -146,19 +147,13 @@ public class DrawerUtil {
     }
 
     public static void drawLink(Graphics g, BaseLink link) {
+        link.drawLink(g);
+
+        // Draw control points
         Point source = link.getSourcePoint();
         Point target = link.getTargetPoint();
-
-        g.setColor(Color.BLACK);
-        g.drawLine(source.x, source.y, target.x, target.y);
-
-        // 可以選擇在連接點畫一個小圓點
-        int dotSize = 4;
-        g.fillOval(source.x - dotSize / 2, source.y - dotSize / 2, dotSize, dotSize);
-        g.fillOval(target.x - dotSize / 2, target.y - dotSize / 2, dotSize, dotSize);
-
-        DrawerUtil.drawSingleControlPoint(g, source.x, source.y);
-        DrawerUtil.drawSingleControlPoint(g, target.x, target.y);
+        drawSingleControlPoint(g, source.x, source.y);
+        drawSingleControlPoint(g, target.x, target.y);
     }
 
     public static void drawLabel(Graphics g, BaseObject object) {
