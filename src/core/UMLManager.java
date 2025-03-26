@@ -8,8 +8,6 @@ import modes.Mode;
 import objects.BaseObject;
 
 public class UMLManager {
-    private static UMLManager instance;
-
     private Mode mode;
 
     private List<BaseObject> objects = new ArrayList<>();
@@ -19,11 +17,12 @@ public class UMLManager {
     private UMLManager() {
     }
 
+    private static class Holder {
+        private static final UMLManager INSTANCE = new UMLManager();
+    }
+
     public static UMLManager getInstance() {
-        if (instance == null) {
-            instance = new UMLManager();
-        }
-        return instance;
+        return Holder.INSTANCE;
     }
 
     public List<BaseObject> getObjects() {

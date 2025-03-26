@@ -13,8 +13,6 @@ import forms.Canvas;
 import utils.DrawerUtil;
 
 public class CanvasManager {
-    private static CanvasManager instance;
-
     private final List<Drawable> DEFAULT_DRAWERS = DrawerFactory.createDefaultDrawers();
     private List<Drawable> drawers = new ArrayList<>(DEFAULT_DRAWERS);
 
@@ -25,11 +23,12 @@ public class CanvasManager {
     private CanvasManager() {
     }
 
+    private static class Holder {
+        private static final CanvasManager INSTANCE = new CanvasManager();
+    }
+
     public static CanvasManager getInstance() {
-        if (instance == null) {
-            instance = new CanvasManager();
-        }
-        return instance;
+        return Holder.INSTANCE;
     }
 
     public void update() {
