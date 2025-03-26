@@ -7,17 +7,15 @@ import java.awt.Graphics;
 
 import core.UMLManager;
 
-import forms.Canvas;
-
 import objects.BaseObject;
 import objects.Boundary;
 import objects.ObjectLabel;
 
-public class LabelDrawer implements Drawer {
+public class LabelDrawer implements Drawable {
     private final UMLManager umlManager = UMLManager.getInstance();
 
     @Override
-    public void draw(Graphics g, Canvas canvas) {
+    public void draw(Graphics g) {
         umlManager.getObjects()
                 .stream()
                 .filter(object -> object.getLabel() != null)

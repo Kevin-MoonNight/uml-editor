@@ -6,16 +6,18 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
+import core.CanvasManager;
 import core.UMLManager;
 import forms.Canvas;
 import modes.LinkMode;
 import utils.DrawerUtil;
 
-public class LinkingDrawer implements Drawer {
+public class LinkingDrawer implements Drawable {
     private final UMLManager umlManager = UMLManager.getInstance();
+    private final CanvasManager canvasManager = CanvasManager.getInstance();
 
     @Override
-    public void draw(Graphics g, Canvas canvas) {
+    public void draw(Graphics g) {
         var linkMode = (LinkMode) umlManager.getMode();
         var source = linkMode.getSourcePoint();
 
@@ -25,7 +27,7 @@ public class LinkingDrawer implements Drawer {
 
         DrawerUtil.drawControlPoint(g, source);
 
-        var target = retrieveTargetPoint(canvas, linkMode);
+        var target = retrieveTargetPoint(canvasManager.getCanvas(), linkMode);
 
         drawLinkLine(g, source, target);
     }

@@ -7,22 +7,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import drawers.Drawer;
-import drawers.LabelDrawer;
-import drawers.LinkDrawer;
-import drawers.ObjectDrawer;
+import drawers.Drawable;
+import drawers.DrawerFactory;
 import forms.Canvas;
 import utils.DrawerUtil;
 
 public class CanvasManager {
     private static CanvasManager instance;
 
-    private static final Drawer[] DEFAULT_DRAWERS = new Drawer[] {
-            new ObjectDrawer(),
-            new LinkDrawer(),
-            new LabelDrawer(),
-    };
-    private List<Drawer> drawers = new ArrayList<>(Arrays.asList(DEFAULT_DRAWERS));
+    private final List<Drawable> DEFAULT_DRAWERS = DrawerFactory.createDefaultDrawers();
+    private List<Drawable> drawers = new ArrayList<>(DEFAULT_DRAWERS);
 
     private Canvas canvas;
 
@@ -87,10 +81,10 @@ public class CanvasManager {
         };
     }
 
-    public void registerCustomDrawer(Drawer drawer) {
+    public void registerCustomDrawer(Drawable drawer) {
         drawers.clear();
 
-        drawers.addAll(Arrays.asList(DEFAULT_DRAWERS));
+        drawers.addAll(DEFAULT_DRAWERS);
 
         if (drawer == null) {
             return;
@@ -106,7 +100,11 @@ public class CanvasManager {
 
         DrawerUtil.clear(canvas, g);
 
-        drawers.forEach(drawer -> drawer.draw(g, canvas));
+        drawers.forEach(drawer -> drawer.draw(g));
+    }
+
+    public Canvas getCanvas() {
+        return canvas;
     }
 
     public void setCanvas(Canvas canvas) {

@@ -6,15 +6,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import core.UMLManager;
-import forms.Canvas;
 import modes.SelectMode;
 import objects.Boundary;
 
-public class SelectBoxDrawer implements Drawer {
+public class SelectBoxDrawer implements Drawable {
     private final UMLManager umlManager = UMLManager.getInstance();
 
     @Override
-    public void draw(Graphics g, Canvas canvas) {
+    public void draw(Graphics g) {
         var selectMode = (SelectMode) umlManager.getMode();
         var origin = selectMode.getSource();
         var destination = selectMode.getTarget();

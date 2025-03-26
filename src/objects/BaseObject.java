@@ -3,6 +3,7 @@ package objects;
 import java.awt.Graphics;
 
 import core.UMLManager;
+import drawers.Drawable;
 
 public class BaseObject implements Boundable, Drawable {
     protected UMLManager umlManager = UMLManager.getInstance();

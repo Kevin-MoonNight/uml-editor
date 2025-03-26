@@ -1,10 +1,12 @@
 package links;
 
 import java.awt.Point;
+
+import drawers.Drawable;
+
 import java.awt.Graphics;
 
 import objects.BaseObject;
-import objects.Drawable;
 import utils.ControlPointUtil;
 
 public class BaseLink implements Drawable {
