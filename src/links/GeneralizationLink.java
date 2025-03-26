@@ -1,12 +1,14 @@
 package links;
 
 import java.awt.Point;
+
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 
 import objects.BaseObject;
+import utils.DrawerUtil;
 
 public class GeneralizationLink extends BaseLink {
     public GeneralizationLink(BaseObject source, BaseObject target, Point sourcePoint, Point targetPoint) {
@@ -14,7 +16,7 @@ public class GeneralizationLink extends BaseLink {
     }
 
     @Override
-    public void drawLink(Graphics g) {
+    public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setStroke(new BasicStroke(2.0f));
 
@@ -46,5 +48,8 @@ public class GeneralizationLink extends BaseLink {
 
         // Draw triangle
         g2d.drawPolygon(xPoints, yPoints, 3);
+
+        DrawerUtil.drawControlPoint(g, getSourcePoint());
+        DrawerUtil.drawControlPoint(g, getTargetPoint());
     }
 }

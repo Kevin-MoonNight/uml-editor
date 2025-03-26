@@ -11,7 +11,7 @@ import events.StopLinkEvent;
 import links.BaseLink;
 import objects.BaseObject;
 import objects.CompositeObject;
-import utils.LineUtil;
+import utils.ControlPointUtil;
 
 public abstract class LinkMode implements Mode {
     protected UMLManager umlManager;
@@ -100,7 +100,7 @@ public abstract class LinkMode implements Mode {
         this.sourcePoint = sourcePoint;
 
         if (this.source != null) {
-            this.sourcePoint = LineUtil.findNearestControlPoint(source, sourcePoint);
+            this.sourcePoint = ControlPointUtil.findNearestControlPoint(source, sourcePoint);
         }
     }
 
@@ -108,7 +108,7 @@ public abstract class LinkMode implements Mode {
         this.targetPoint = targetPoint;
 
         if (this.target != null) {
-            this.targetPoint = LineUtil.findNearestControlPoint(target, targetPoint);
+            this.targetPoint = ControlPointUtil.findNearestControlPoint(target, targetPoint);
         }
     }
 

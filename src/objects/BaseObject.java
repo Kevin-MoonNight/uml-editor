@@ -2,7 +2,11 @@ package objects;
 
 import java.awt.Graphics;
 
-public abstract class BaseObject implements Boundable {
+import core.UMLManager;
+
+public class BaseObject implements Boundable, Drawable {
+    protected UMLManager umlManager = UMLManager.getInstance();
+
     protected ObjectLabel label;
     protected Boundary boundary;
 
@@ -26,5 +30,8 @@ public abstract class BaseObject implements Boundable {
         this.boundary = boundary;
     }
 
-    public abstract void draw(Graphics g, boolean isSelected);
+    @Override
+    public void draw(Graphics g) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

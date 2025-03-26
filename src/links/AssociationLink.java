@@ -1,9 +1,13 @@
 package links;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 
 import objects.BaseObject;
+import utils.DrawerUtil;
 
 public class AssociationLink extends BaseLink {
     public AssociationLink(BaseObject source, BaseObject target, Point sourcePoint, Point targetPoint) {
@@ -11,7 +15,7 @@ public class AssociationLink extends BaseLink {
     }
 
     @Override
-    public void drawLink(Graphics g) {
+    public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setStroke(new BasicStroke(2.0f));
 
@@ -40,5 +44,8 @@ public class AssociationLink extends BaseLink {
         // Draw arrow
         g2d.drawLine(xPoints[0], yPoints[0], xPoints[1], yPoints[1]);
         g2d.drawLine(xPoints[0], yPoints[0], xPoints[2], yPoints[2]);
+
+        DrawerUtil.drawControlPoint(g, getSourcePoint());
+        DrawerUtil.drawControlPoint(g, getTargetPoint());
     }
 }

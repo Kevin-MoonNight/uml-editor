@@ -1,12 +1,14 @@
 package drawers;
 
+import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import core.UMLManager;
 import forms.Canvas;
 import modes.SelectMode;
 import objects.Boundary;
-import utils.DrawerUtil;
 
 public class SelectBoxDrawer implements Drawer {
     private final UMLManager umlManager = UMLManager.getInstance();
@@ -23,7 +25,28 @@ public class SelectBoxDrawer implements Drawer {
                     Math.min(origin.y, destination.y),
                     Math.abs(destination.x - origin.x),
                     Math.abs(destination.y - origin.y));
-            DrawerUtil.drawSelectBox(g, boundary);
+            drawSelectBox(g, boundary);
         }
+    }
+
+    private void drawSelectBox(Graphics g, Boundary b) {
+        int x = b.getX();
+        int y = b.getY();
+        int width = b.getWidth();
+        int height = b.getHeight();
+
+        Graphics2D g2d = (Graphics2D) g;
+        // 保存原始設置
+        Composite originalComposite = g2d.getComposite();
+
+        // 設置半透明度 (0.3f 表示 30% 的不透明度)
+        g2d.setComposite(java.awt.AlphaComposite.getInstance(java.awt.AlphaComposite.SRC_OVER, 0.3f));
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(x, y, width, height);
+
+        // 恢復原始設置
+        g2d.setComposite(originalComposite);
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(x, y, width, height);
     }
 }

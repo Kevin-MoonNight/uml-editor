@@ -1,12 +1,13 @@
 package objects;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
 import utils.BoundaryUtil;
+import utils.ControlPointUtil;
 import utils.DrawerUtil;
-import utils.LineUtil;
 
 public class CompositeObject extends BaseObject {
     private List<BaseObject> objects = new ArrayList<>();
@@ -26,15 +27,21 @@ public class CompositeObject extends BaseObject {
     }
 
     @Override
-    public void draw(Graphics g, boolean isSelected) {
-        getObjects().forEach(obj -> obj.draw(g, false));
+    public void draw(Graphics g) {
+        objects.forEach(obj -> obj.draw(g));
 
-        if (!isSelected) {
+        if (!umlManager.isSelected(this)) {
             return;
         }
 
-        DrawerUtil.drawCompositeBox(g, getBoundary());
-        LineUtil.getCornerControlPoints(getBoundary())
-                .forEach(p -> DrawerUtil.drawSingleControlPoint(g, p.x, p.y));
+        drawCompositeBox(g, getBoundary());
+
+        ControlPointUtil.getCornerControlPoints(getBoundary())
+                .forEach(p -> DrawerUtil.drawControlPoint(g, p));
+    }
+
+    private void drawCompositeBox(Graphics g, Boundary b) {
+        g.setColor(Color.BLACK);
+        g.drawRect(b.getX(), b.getY(), b.getWidth(), b.getHeight());
     }
 }

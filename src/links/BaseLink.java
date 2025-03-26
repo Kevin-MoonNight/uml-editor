@@ -4,9 +4,10 @@ import java.awt.Point;
 import java.awt.Graphics;
 
 import objects.BaseObject;
-import utils.LineUtil;
+import objects.Drawable;
+import utils.ControlPointUtil;
 
-public abstract class BaseLink {
+public class BaseLink implements Drawable {
     private BaseObject source;
     private BaseObject target;
     private Point sourcePoint;
@@ -22,8 +23,8 @@ public abstract class BaseLink {
 
     public void updateConnectionPoints() {
         // 找到最近的控制點
-        sourcePoint = LineUtil.findNearestControlPoint(source, sourcePoint);
-        targetPoint = LineUtil.findNearestControlPoint(target, targetPoint);
+        sourcePoint = ControlPointUtil.findNearestControlPoint(source, sourcePoint);
+        targetPoint = ControlPointUtil.findNearestControlPoint(target, targetPoint);
     }
 
     public BaseObject getSource() {
@@ -50,5 +51,8 @@ public abstract class BaseLink {
         return targetPoint;
     }
 
-    public abstract void drawLink(Graphics g);
+    @Override
+    public void draw(Graphics g) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

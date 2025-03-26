@@ -1,9 +1,10 @@
 package objects;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
+import utils.ControlPointUtil;
 import utils.DrawerUtil;
-import utils.LineUtil;
 
 public class RectObject extends BaseObject {
     public RectObject(Boundary boundary) {
@@ -11,15 +12,18 @@ public class RectObject extends BaseObject {
     }
 
     @Override
-    public void draw(Graphics g, boolean isSelected) {
-        DrawerUtil.drawRect(g, getBoundary());
-        DrawerUtil.drawLabel(g, this);
+    public void draw(Graphics g) {
+        Boundary b = getBoundary();
+        g.setColor(Color.BLACK);
+        g.drawRect(b.getX(), b.getY(), b.getWidth(), b.getHeight());
+        g.setColor(Color.GRAY);
+        g.fillRect(b.getX(), b.getY(), b.getWidth(), b.getHeight());
 
-        if (!isSelected) {
+        if (!umlManager.isSelected(this)) {
             return;
         }
 
-        LineUtil.getAllControlPoints(getBoundary())
-                .forEach(p -> DrawerUtil.drawSingleControlPoint(g, p.x, p.y));
+        ControlPointUtil.getAllControlPoints(b)
+                .forEach(p -> DrawerUtil.drawControlPoint(g, p));
     }
 }

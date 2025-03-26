@@ -8,9 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import drawers.Drawer;
+import drawers.LabelDrawer;
 import drawers.LinkDrawer;
-import drawers.SelectedObjectDrawer;
-import drawers.UnSelectedObjectDrawer;
+import drawers.ObjectDrawer;
 import forms.Canvas;
 import utils.DrawerUtil;
 
@@ -18,9 +18,9 @@ public class CanvasManager {
     private static CanvasManager instance;
 
     private static final Drawer[] DEFAULT_DRAWERS = new Drawer[] {
-            new SelectedObjectDrawer(),
-            new UnSelectedObjectDrawer(),
-            new LinkDrawer()
+            new ObjectDrawer(),
+            new LinkDrawer(),
+            new LabelDrawer(),
     };
     private List<Drawer> drawers = new ArrayList<>(Arrays.asList(DEFAULT_DRAWERS));
 
