@@ -1,7 +1,9 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import links.BaseLink;
 import modes.Mode;
@@ -10,9 +12,9 @@ import objects.BaseObject;
 public class UMLManager {
     private Mode mode;
 
-    private List<BaseObject> objects = new ArrayList<>();
-    private List<BaseLink> links = new ArrayList<>();
-    private List<BaseObject> selectedObjects = new ArrayList<>();
+    private final List<BaseObject> objects = Collections.synchronizedList(new ArrayList<>());
+    private final List<BaseLink> links = Collections.synchronizedList(new ArrayList<>());
+    private final List<BaseObject> selectedObjects = Collections.synchronizedList(new ArrayList<>());
 
     private UMLManager() {
     }
@@ -26,14 +28,20 @@ public class UMLManager {
     }
 
     public List<BaseObject> getObjects() {
-        return objects;
+        return Collections.unmodifiableList(objects);
     }
 
     public List<BaseLink> getLinks() {
-        return links;
+        return Collections.unmodifiableList(links);
     }
 
     public void addObject(BaseObject object) {
+        Objects.requireNonNull(object, "Object cannot be null");
+
+        if (objects.contains(object)) {
+            return;
+        }
+
         objects.add(object);
     }
 
@@ -47,21 +55,17 @@ public class UMLManager {
         links.add(link);
     }
 
-    public void removeLink(BaseLink link) {
-        links.remove(link);
-    }
-
     public List<BaseObject> getSelectedObjects() {
-        return selectedObjects;
-    }
-
-    public List<BaseObject> getUnSelectedObjects() {
-        return objects.stream()
-                .filter(obj -> !selectedObjects.contains(obj))
-                .toList();
+        return Collections.unmodifiableList(selectedObjects);
     }
 
     public void upperObject(BaseObject object) {
+        Objects.requireNonNull(object, "Object cannot be null");
+
+        if (!objects.contains(object)) {
+            return;
+        }
+
         objects.remove(object);
         objects.add(object);
     }
@@ -71,10 +75,13 @@ public class UMLManager {
     }
 
     public void updateSelectedObjects(List<BaseObject> objects) {
-        objects.forEach(object -> upperObject(object));
+        Objects.requireNonNull(objects, "Objects cannot be null");
 
-        selectedObjects.clear();
-        selectedObjects.addAll(objects);
+        synchronized (this) {
+            objects.forEach(this::upperObject);
+            selectedObjects.clear();
+            selectedObjects.addAll(objects);
+        }
     }
 
     public boolean isSelected(BaseObject object) {
@@ -90,11 +97,6 @@ public class UMLManager {
     }
 
     public void setMode(Mode mode) {
-        this.mode = mode;
-    }
-
-    public void reset() {
-        objects.clear();
-        links.clear();
+        this.mode = Objects.requireNonNull(mode, "Mode cannot be null");
     }
 }
