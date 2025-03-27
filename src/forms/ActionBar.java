@@ -31,8 +31,9 @@ public class ActionBar extends JToolBar {
 
     private static final Dimension size = new Dimension(100, Integer.MAX_VALUE);
 
-    private UMLManager umlManager = UMLManager.getInstance();
-    private CanvasManager canvasManager = CanvasManager.getInstance();
+    private final UMLManager umlManager = UMLManager.getInstance();
+    private final CanvasManager canvasManager = CanvasManager.getInstance();
+    private final DrawerFactory drawerFactory = new DrawerFactory(umlManager, canvasManager);
 
     public ActionBar() {
         setup();
@@ -67,19 +68,19 @@ public class ActionBar extends JToolBar {
         switch (action) {
             case "Select":
                 mode = new SelectMode(umlManager);
-                customerDrawer = DrawerFactory.createDrawer(DrawerType.SELECT);
+                customerDrawer = drawerFactory.createDrawer(DrawerType.SELECT);
                 break;
             case "Association":
                 mode = new AssociationLinkMode(umlManager);
-                customerDrawer = DrawerFactory.createDrawer(DrawerType.LINKING);
+                customerDrawer = drawerFactory.createDrawer(DrawerType.LINKING);
                 break;
             case "Generalization":
                 mode = new GeneralizationLinkMode(umlManager);
-                customerDrawer = DrawerFactory.createDrawer(DrawerType.LINKING);
+                customerDrawer = drawerFactory.createDrawer(DrawerType.LINKING);
                 break;
             case "Composition":
                 mode = new CompositionLinkMode(umlManager);
-                customerDrawer = DrawerFactory.createDrawer(DrawerType.LINKING);
+                customerDrawer = drawerFactory.createDrawer(DrawerType.LINKING);
                 break;
             case "Rect":
                 mode = new CreateRectMode(umlManager);

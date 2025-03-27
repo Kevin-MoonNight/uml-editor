@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.util.Objects;
 
 import core.UMLManager;
 
@@ -12,7 +13,13 @@ import objects.Boundary;
 import objects.ObjectLabel;
 
 public class LabelDrawer implements Drawable {
-    private final UMLManager umlManager = UMLManager.getInstance();
+    private final UMLManager umlManager;
+
+    public LabelDrawer(UMLManager umlManager) {
+        Objects.requireNonNull(umlManager, "UMLManager cannot be null");
+
+        this.umlManager = umlManager;
+    }
 
     @Override
     public void draw(Graphics g) {

@@ -4,13 +4,20 @@ import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Objects;
 
 import core.UMLManager;
 import modes.SelectMode;
 import objects.Boundary;
 
 public class SelectBoxDrawer implements Drawable {
-    private final UMLManager umlManager = UMLManager.getInstance();
+    private final UMLManager umlManager;
+
+    public SelectBoxDrawer(UMLManager umlManager) {
+        Objects.requireNonNull(umlManager, "UMLManager cannot be null");
+
+        this.umlManager = umlManager;
+    }
 
     @Override
     public void draw(Graphics g) {

@@ -13,7 +13,8 @@ import forms.Canvas;
 import utils.DrawerUtil;
 
 public class CanvasManager {
-    private final List<Drawable> DEFAULT_DRAWERS = DrawerFactory.createDefaultDrawers();
+    private final DrawerFactory drawerFactory = new DrawerFactory(UMLManager.getInstance(), this);
+    private final List<Drawable> DEFAULT_DRAWERS = drawerFactory.createDefaultDrawers();
     private List<Drawable> drawers = new ArrayList<>(DEFAULT_DRAWERS);
 
     private Canvas canvas;
