@@ -4,9 +4,10 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import constants.UMLConstants;
 import drawers.Drawable;
 import drawers.DrawerType;
 import drawers.LabelDrawer;
@@ -15,7 +16,13 @@ import drawers.LinkingDrawer;
 import drawers.NullDrawer;
 import drawers.ObjectDrawer;
 import drawers.SelectBoxDrawer;
+import modes.AssociationLinkMode;
+import modes.CompositionLinkMode;
+import modes.CreateOvalMode;
+import modes.CreateRectMode;
+import modes.GeneralizationLinkMode;
 import modes.Mode;
+import modes.SelectMode;
 
 public class DrawerManager implements ModeChangeListener {
     private final UMLManager umlManager = UMLManager.getInstance();
@@ -23,6 +30,16 @@ public class DrawerManager implements ModeChangeListener {
     private final ModeManager modeManager = ModeManager.getInstance();
     private final List<Drawable> DEFAULT_DRAWERS = createDefaultDrawers();
     private List<Drawable> drawers = Collections.synchronizedList(new ArrayList<>(DEFAULT_DRAWERS));
+
+    public static final Map<Class<? extends Mode>, DrawerType> MODE_DRAWER_MAP = new HashMap<>();
+    static {
+        MODE_DRAWER_MAP.put(SelectMode.class, DrawerType.SELECT);
+        MODE_DRAWER_MAP.put(AssociationLinkMode.class, DrawerType.LINKING);
+        MODE_DRAWER_MAP.put(GeneralizationLinkMode.class, DrawerType.LINKING);
+        MODE_DRAWER_MAP.put(CompositionLinkMode.class, DrawerType.LINKING);
+        MODE_DRAWER_MAP.put(CreateRectMode.class, DrawerType.NONE);
+        MODE_DRAWER_MAP.put(CreateOvalMode.class, DrawerType.NONE);
+    }
 
     private DrawerManager() {
     }
@@ -64,7 +81,8 @@ public class DrawerManager implements ModeChangeListener {
 
     @Override
     public void onModeChanged(Mode oldMode, Mode newMode) {
-        var drawer = createDrawer(UMLConstants.MODE_DRAWER_MAP.get(newMode.getClass()));
+        var drawer = createDrawer(MODE_DRAWER_MAP.get(newMode.getClass()));
+
         registerCustomDrawer(drawer);
     }
 
