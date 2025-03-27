@@ -6,22 +6,22 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Objects;
 
-import core.UMLManager;
+import core.ModeManager;
 import modes.SelectMode;
 import objects.Boundary;
 
 public class SelectBoxDrawer implements Drawable {
-    private final UMLManager umlManager;
+    private final ModeManager modeManager;
 
-    public SelectBoxDrawer(UMLManager umlManager) {
-        Objects.requireNonNull(umlManager, "UMLManager cannot be null");
+    public SelectBoxDrawer(ModeManager modeManager) {
+        Objects.requireNonNull(modeManager, "ModeManager cannot be null");
 
-        this.umlManager = umlManager;
+        this.modeManager = modeManager;
     }
 
     @Override
     public void draw(Graphics g) {
-        var selectMode = (SelectMode) umlManager.getMode();
+        SelectMode selectMode = (SelectMode) modeManager.getMode();
         var origin = selectMode.getSource();
         var destination = selectMode.getTarget();
 

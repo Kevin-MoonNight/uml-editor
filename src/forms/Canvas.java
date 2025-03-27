@@ -3,11 +3,14 @@ package forms;
 import javax.swing.*;
 
 import core.CanvasManager;
+import core.DrawerManager;
+import utils.DrawerUtil;
 
 import java.awt.*;
 
 public class Canvas extends JPanel {
-    private static final CanvasManager canvasManager = CanvasManager.getInstance();
+    private final CanvasManager canvasManager = CanvasManager.getInstance();
+    private final DrawerManager drawerManager = DrawerManager.getInstance();
 
     public Canvas() {
         setup();
@@ -24,6 +27,8 @@ public class Canvas extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        canvasManager.render(g);
+        DrawerUtil.clear(this, g);
+
+        drawerManager.drawAll(g);
     }
 }

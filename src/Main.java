@@ -2,6 +2,10 @@ import forms.UMLEditorForm;
 
 import javax.swing.*;
 
+import core.CanvasManager;
+import core.DrawerManager;
+import core.ModeManager;
+
 public class Main {
     public static void main(String[] args) {
         initializeUI();
@@ -18,5 +22,8 @@ public class Main {
             UMLEditorForm form = new UMLEditorForm();
             form.show();
         });
+
+        ModeManager.getInstance().addModeChangeListener(CanvasManager.getInstance());
+        ModeManager.getInstance().addModeChangeListener(DrawerManager.getInstance());
     }
 }

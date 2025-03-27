@@ -1,24 +1,14 @@
 package core;
 
-import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import drawers.Drawable;
-import drawers.DrawerFactory;
 import forms.Canvas;
-import utils.DrawerUtil;
+import modes.Mode;
 
-public class CanvasManager {
-    private final DrawerFactory drawerFactory = new DrawerFactory(UMLManager.getInstance(), this);
-    private final List<Drawable> DEFAULT_DRAWERS = drawerFactory.createDefaultDrawers();
-    private List<Drawable> drawers = new ArrayList<>(DEFAULT_DRAWERS);
-
+public class CanvasManager implements ModeChangeListener {
     private Canvas canvas;
-
     private MouseAdapter defaultTrigger = getDefaultTrigger();
 
     private CanvasManager() {
@@ -81,26 +71,9 @@ public class CanvasManager {
         };
     }
 
-    public void registerCustomDrawer(Drawable drawer) {
-        drawers.clear();
-
-        drawers.addAll(DEFAULT_DRAWERS);
-
-        if (drawer == null) {
-            return;
-        }
-
-        drawers.add(drawer);
-    }
-
-    public void render(Graphics g) {
-        if (canvas == null) {
-            return;
-        }
-
-        DrawerUtil.clear(canvas, g);
-
-        drawers.forEach(drawer -> drawer.draw(g));
+    @Override
+    public void onModeChanged(Mode oldMode, Mode newMode) {
+        registerTrigger(newMode.getTrigger());
     }
 
     public Canvas getCanvas() {

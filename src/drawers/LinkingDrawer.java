@@ -8,26 +8,28 @@ import java.awt.Point;
 import java.util.Objects;
 
 import core.CanvasManager;
-import core.UMLManager;
+import core.ModeManager;
 import forms.Canvas;
 import modes.LinkMode;
 import utils.DrawerUtil;
 
 public class LinkingDrawer implements Drawable {
-    private final UMLManager umlManager;
+    private final ModeManager modeManager;
+
     private final CanvasManager canvasManager;
 
-    public LinkingDrawer(UMLManager umlManager, CanvasManager canvasManager) {
-        Objects.requireNonNull(umlManager, "UMLManager cannot be null");
+    public LinkingDrawer(ModeManager modeManager, CanvasManager canvasManager) {
+        Objects.requireNonNull(modeManager, "ModeManager cannot be null");
         Objects.requireNonNull(canvasManager, "CanvasManager cannot be null");
 
-        this.umlManager = umlManager;
+        this.modeManager = modeManager;
+
         this.canvasManager = canvasManager;
     }
 
     @Override
     public void draw(Graphics g) {
-        var linkMode = (LinkMode) umlManager.getMode();
+        LinkMode linkMode = (LinkMode) modeManager.getMode();
         var source = linkMode.getSourcePoint();
 
         if (source == null) {

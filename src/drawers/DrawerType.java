@@ -5,5 +5,6 @@ public enum DrawerType {
     OBJECT,
     LINK,
     SELECT,
-    LINKING
+    LINKING,
+    NONE
 }
