@@ -2,6 +2,7 @@ package forms;
 
 import javax.swing.*;
 
+import constants.UMLConstants;
 import core.CanvasManager;
 import core.UMLManager;
 import drawers.Drawable;
@@ -18,19 +19,6 @@ import modes.SelectMode;
 import java.awt.*;
 
 public class ActionBar extends JToolBar {
-    private static final String[] actions = {
-            "Select",
-            "Association",
-            "Generalization",
-            "Composition",
-            "Rect",
-            "Oval"
-    };
-
-    private static final String DEFAULT_ACTION = "Select";
-
-    private static final Dimension size = new Dimension(100, Integer.MAX_VALUE);
-
     private final UMLManager umlManager = UMLManager.getInstance();
     private final CanvasManager canvasManager = CanvasManager.getInstance();
     private final DrawerFactory drawerFactory = new DrawerFactory(umlManager, canvasManager);
@@ -41,17 +29,17 @@ public class ActionBar extends JToolBar {
     }
 
     private void setup() {
-        setLayout(new GridLayout(actions.length, 1, 10, 10));
-        setPreferredSize(size);
+        setLayout(new GridLayout(UMLConstants.ACTIONS.length, 1, 10, 10));
+        setPreferredSize(new Dimension(100, Integer.MAX_VALUE));
         setFloatable(false);
     }
 
     private void createActionButtons() {
-        for (String action : actions) {
+        for (String action : UMLConstants.ACTIONS) {
             ActionButton btn = new ActionButton(action);
             btn.addActionListener(e -> handleAction(action));
 
-            if (action.equals(DEFAULT_ACTION)) {
+            if (action.equals(UMLConstants.DEFAULT_ACTION)) {
                 btn.requestFocus();
             }
 
