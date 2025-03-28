@@ -26,4 +26,8 @@ public final class UMLConstants {
     // Window settings
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
+
+    // Error messages
+    public static final String ERROR_TITLE = "Initialization Error";
+    public static final String ERROR_MESSAGE_FORMAT = "Application initialization failed: %s";
 }
