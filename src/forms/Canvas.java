@@ -5,6 +5,7 @@ import javax.swing.*;
 import core.CanvasManager;
 import core.DrawerManager;
 import utils.DrawerUtil;
+import constants.UMLConstants;
 
 import java.awt.*;
 
@@ -18,7 +19,7 @@ public class Canvas extends JPanel {
 
     public void setup() {
         setLayout(null);
-        setBackground(Color.lightGray);
+        setBackground(UMLConstants.CANVAS_BG);
 
         canvasManager.setCanvas(this);
     }

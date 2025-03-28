@@ -2,6 +2,7 @@ package forms;
 
 import javax.swing.*;
 import java.awt.*;
+import constants.UMLConstants;
 
 public class UMLEditorForm {
     private final JFrame frame = new JFrame("UML Editor");
@@ -27,7 +28,7 @@ public class UMLEditorForm {
     private void setUpFrame() {
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(UMLConstants.WINDOW_WIDTH, UMLConstants.WINDOW_HEIGHT);
         frame.setLocationRelativeTo(null);
 
         frame.setJMenuBar(menubar);
