@@ -11,6 +11,12 @@ public class ActionButton extends JButton {
     private ImageIcon originalIcon;
 
     public ActionButton(String name) {
+        configureButton(name);
+        
+        configureInteractionHandlers();
+    }
+
+    private void configureButton(String name) {
         setContentAreaFilled(false);
         setOpaque(true);
         setBorderPainted(true);
@@ -19,9 +25,7 @@ public class ActionButton extends JButton {
         setFocusable(true);
         setBackground(UMLConstants.BUTTON_DEFAULT_BG);
         setForeground(UMLConstants.BUTTON_DEFAULT_FG);
-
         loadIcon(name);
-        setupListeners();
     }
 
     private void loadIcon(String name) {
@@ -33,7 +37,7 @@ public class ActionButton extends JButton {
         }
     }
 
-    private void setupListeners() {
+    private void configureInteractionHandlers() {
         addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
