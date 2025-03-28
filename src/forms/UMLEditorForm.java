@@ -5,7 +5,7 @@ import java.awt.*;
 import constants.UMLConstants;
 
 public class UMLEditorForm {
-    private final JFrame frame = new JFrame("UML Editor");
+    private final JFrame frame = new JFrame(UMLConstants.WINDOW_TITLE);
     private final Canvas canvas = new Canvas();
     private final MenuBar menubar = new MenuBar(frame);
     private final ActionBar actionBar = new ActionBar();

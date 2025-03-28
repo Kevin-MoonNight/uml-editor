@@ -24,6 +24,7 @@ public final class UMLConstants {
     public static final Color CANVAS_BG = Color.LIGHT_GRAY;
 
     // Window settings
+    public static final String WINDOW_TITLE = "UML Editor";
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
 
