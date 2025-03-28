@@ -12,11 +12,11 @@ public class ActionBar extends JToolBar {
     private final ModeManager modeManager = ModeManager.getInstance();
 
     public ActionBar() {
-        setup();
+        configureLayout();
         createActionButtons();
     }
 
-    private void setup() {
+    private void configureLayout() {
         setLayout(new GridLayout(UMLMode.values().length, 1, 10, 10));
         setPreferredSize(new Dimension(100, Integer.MAX_VALUE));
         setFloatable(false);
